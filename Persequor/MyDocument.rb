@@ -67,12 +67,9 @@ class MyDocument < NSPersistentDocument
         puts 'return pressed'
         predicate = @predicate_editor.objectValue
         p predicate
+        @array_controller.setFilterPredicate(predicate)
       end
     end
-    
-    #if @predicate_editor.numberOfRows == 0
-    #  @predicate_editor.addRow(self)
-    #end
     
     # resize window as needed
     new_row_count = @predicate_editor.numberOfRows
