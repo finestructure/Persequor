@@ -32,10 +32,10 @@
 		5A57A4D81425F1A7000F496A /* Persequor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Persequor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A57A4DC1425F1A7000F496A /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		5A57A4DE1425F1A7000F496A /* MacRuby.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MacRuby.framework; path = Library/Frameworks/MacRuby.framework; sourceTree = DEVELOPER_DIR; };
-		5A57A4E51425F1A7000F496A /* Persequor-Info.plist */ = {isa = PBXFileReference; path = "Persequor-Info.plist"; sourceTree = "<group>"; };
+		5A57A4E51425F1A7000F496A /* Persequor-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Persequor-Info.plist"; sourceTree = "<group>"; };
 		5A57A4E71425F1A7000F496A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		5A57A4E91425F1A7000F496A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		5A57A4EB1425F1A7000F496A /* Persequor-Prefix.pch */ = {isa = PBXFileReference; path = "Persequor-Prefix.pch"; sourceTree = "<group>"; };
+		5A57A4EB1425F1A7000F496A /* Persequor-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Persequor-Prefix.pch"; sourceTree = "<group>"; };
 		5A57A4ED1425F1A7000F496A /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		5A57A4F01425F1A7000F496A /* rb_main.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = rb_main.rb; sourceTree = "<group>"; };
 		5A57A4F21425F1A7000F496A /* MyDocument.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = MyDocument.rb; sourceTree = "<group>"; };
