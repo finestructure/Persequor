@@ -11,6 +11,7 @@ require 'trac4r/trac'
 
 class MyDocument < NSPersistentDocument
   attr_accessor :data
+  attr_accessor :predicate_editor
   attr_accessor :queue
   attr_accessor :table_view
 
@@ -33,6 +34,8 @@ class MyDocument < NSPersistentDocument
 
   def windowControllerDidLoadNib(aController)
     super
+    
+    @predicate_editor.addRow(self)
   end
 
 
@@ -62,6 +65,12 @@ class MyDocument < NSPersistentDocument
 
 
   # actions
+  
+  
+  def predicateEditorChanged(sender)
+    puts 'editor'
+  end
+  
   
   def button_pressed(sender)
     puts 'in here'
