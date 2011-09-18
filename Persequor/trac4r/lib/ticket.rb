@@ -14,12 +14,13 @@ module Trac
                   :summary,     # String
                   :description, # String
                   :keywords,    # String
+                  :component,   # String
                   :created_at,  # XMLRPC::DateTime
                   :updated_at)  # XMLRPC::DateTime
     # returns a new ticket
     def initialize id=0
       @id = id
-      @severity=@milestone=@status=@type=@priority=@version=@reporter=@owner= @cc= @summary=@description=@keywords=""
+      @severity=@milestone=@status=@type=@priority=@version=@reporter=@owner= @cc= @summary=@description=@keywords=@component=""
     end
     
     # checks if all attributes are set
