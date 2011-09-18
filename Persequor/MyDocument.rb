@@ -36,6 +36,10 @@ class MyDocument < NSPersistentDocument
     super
     
     @predicate_editor.addRow(self)
+    display_value = @predicate_editor.displayValuesForRow(1).lastObject
+    if display_value.isKindOfClass(NSControl.class)
+      self.window.makeFirstResponder(display_value)
+    end
   end
 
 
@@ -69,6 +73,7 @@ class MyDocument < NSPersistentDocument
   
   def predicateEditorChanged(sender)
     puts 'editor'
+    
   end
   
   
