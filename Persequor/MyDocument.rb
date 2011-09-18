@@ -6,7 +6,12 @@
 #  Copyright 2011 abstracture GmbH & Co. KG. All rights reserved.
 #
 
+require 'trac'
+
+
 class MyDocument < NSPersistentDocument
+  attr_accessor :textfield
+
   def init
   	super
   	if (self != nil)
@@ -25,6 +30,21 @@ class MyDocument < NSPersistentDocument
   def windowControllerDidLoadNib(aController)
     super
     # Add any code here that needs to be executed once the windowController has loaded the document's window.
+  end
+
+  
+  # helpers
+  def defaults(key)
+    defaults = NSUserDefaults.standardUserDefaults
+    defaults.objectForKey(key)
+  end
+
+
+  # actions
+  
+  def button_pressed(sender)
+    puts 'in here'
+    @textfield.setStringValue(defaults("tracUrl"))
   end
 
 end
