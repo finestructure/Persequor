@@ -6,20 +6,23 @@
 #  Copyright 2011 abstracture GmbH & Co. KG. All rights reserved.
 #
 
-require 'trac'
+require 'trac4r/trac'
 
 
 class MyDocument < NSPersistentDocument
-  attr_accessor :textfield
+  attr_accessor :data
+  attr_accessor :queue
+  attr_accessor :table_view
 
   def init
   	super
   	if (self != nil)
-      # Add your subclass-specific initialization here.
-      # If an error occurs here, return nil.
+      @queue = Dispatch::Queue.new('de.abstracture.presequor')
+      @data = []
   	end
     self
   end
+
 
   def windowNibName
     # Override returning the nib file name of the document
@@ -27,13 +30,31 @@ class MyDocument < NSPersistentDocument
     "MyDocument"
   end
 
+
   def windowControllerDidLoadNib(aController)
     super
-    # Add any code here that needs to be executed once the windowController has loaded the document's window.
+  end
+
+
+  # NSTableViewDataSource
+  
+  def numberOfRowsInTableView(aTableView)
+    return @data.size
+  end
+
+
+  def tableView(aTableView, objectValueForTableColumn:column, row:rowIndex)
+    case column.identifier
+      when "Id"
+        return @data[rowIndex][0]
+      when "Summary"
+        return @data[rowIndex][1]
+    end
   end
 
   
   # helpers
+  
   def defaults(key)
     defaults = NSUserDefaults.standardUserDefaults
     defaults.objectForKey(key)
@@ -44,7 +65,21 @@ class MyDocument < NSPersistentDocument
   
   def button_pressed(sender)
     puts 'in here'
-    @textfield.setStringValue(defaults("tracUrl"))
+    @queue.async do
+      username = defaults("username")
+      trac = Trac.new(defaults("tracUrl"),
+                      username,
+                      defaults("password"))
+      trac.tickets.filter(["owner=#{username}", "status!=closed"]).each do |id|
+        puts id
+        t = trac.tickets.get(id)
+        p t
+        @data << [id, t.summary]
+        Dispatch::Queue.main.async do
+          @table_view.reloadData
+        end
+      end
+    end
   end
 
 end

@@ -16,7 +16,7 @@
 		5A57A4F31425F1A7000F496A /* MyDocument.rb in Resources */ = {isa = PBXBuildFile; fileRef = 5A57A4F21425F1A7000F496A /* MyDocument.rb */; };
 		5A57A4F61425F1A7000F496A /* MyDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5A57A4F41425F1A7000F496A /* MyDocument.xib */; };
 		5A57A4F91425F1A7000F496A /* MyDocument.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5A57A4F71425F1A7000F496A /* MyDocument.xcdatamodeld */; };
-		5A57A5031425F403000F496A /* trac.rb in Resources */ = {isa = PBXBuildFile; fileRef = 5A57A5021425F402000F496A /* trac.rb */; };
+		5A57A50514262BF8000F496A /* trac4r in Resources */ = {isa = PBXBuildFile; fileRef = 5A57A50414262BF8000F496A /* trac4r */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,7 +42,7 @@
 		5A57A4F21425F1A7000F496A /* MyDocument.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = MyDocument.rb; sourceTree = "<group>"; };
 		5A57A4F51425F1A7000F496A /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MyDocument.xib; sourceTree = "<group>"; };
 		5A57A4F81425F1A7000F496A /* MyDocument.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MyDocument.xcdatamodel; sourceTree = "<group>"; };
-		5A57A5021425F402000F496A /* trac.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = trac.rb; sourceTree = "<group>"; };
+		5A57A50414262BF8000F496A /* trac4r */ = {isa = PBXFileReference; lastKnownFileType = folder; path = trac4r; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,13 +87,13 @@
 		5A57A4E31425F1A7000F496A /* Persequor */ = {
 			isa = PBXGroup;
 			children = (
+				5A57A50414262BF8000F496A /* trac4r */,
 				5A57A4EC1425F1A7000F496A /* MainMenu.xib */,
 				5A57A4F21425F1A7000F496A /* MyDocument.rb */,
 				5A57A4F41425F1A7000F496A /* MyDocument.xib */,
 				5A57A4F71425F1A7000F496A /* MyDocument.xcdatamodeld */,
 				5A57A4EF1425F1A7000F496A /* Other Sources */,
 				5A57A4E41425F1A7000F496A /* Supporting Files */,
-				5A57A5021425F402000F496A /* trac.rb */,
 			);
 			path = Persequor;
 			sourceTree = "<group>";
@@ -191,7 +191,7 @@
 				5A57A4F11425F1A7000F496A /* rb_main.rb in Resources */,
 				5A57A4F31425F1A7000F496A /* MyDocument.rb in Resources */,
 				5A57A4F61425F1A7000F496A /* MyDocument.xib in Resources */,
-				5A57A5031425F403000F496A /* trac.rb in Resources */,
+				5A57A50514262BF8000F496A /* trac4r in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
