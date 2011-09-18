@@ -72,6 +72,10 @@ module Trac
       @tickets = Tickets.new(@connection)
     end
     
+    def query(command, *args)
+      @connection.query(command, *args)
+    end
+    
     def api_version
       @connection.query("system.getAPIVersion")
     end
