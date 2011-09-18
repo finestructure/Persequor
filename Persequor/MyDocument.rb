@@ -10,7 +10,7 @@ require 'trac4r/trac'
 
 
 class MyDocument < NSPersistentDocument
-  attr_accessor :data
+  attr_accessor :array_controller
   attr_accessor :predicate_editor
   attr_accessor :previous_row_count
   attr_accessor :queue
@@ -21,7 +21,6 @@ class MyDocument < NSPersistentDocument
   	super
   	if (self != nil)
       @queue = Dispatch::Queue.new('de.abstracture.presequor')
-      @data = []
   	end
     self
   end
@@ -48,23 +47,6 @@ class MyDocument < NSPersistentDocument
   end
 
 
-  # NSTableViewDataSource
-  
-  def numberOfRowsInTableView(aTableView)
-    return @data.size
-  end
-
-
-  def tableView(aTableView, objectValueForTableColumn:column, row:rowIndex)
-    case column.identifier
-      when "Id"
-        return @data[rowIndex][0]
-      when "Summary"
-        return @data[rowIndex][1]
-    end
-  end
-
-  
   # helpers
   
   def defaults(key)
@@ -145,10 +127,9 @@ class MyDocument < NSPersistentDocument
                       username,
                       defaults("password"))
       trac.tickets.filter(["owner=#{username}", "status!=closed"]).each do |id|
-        puts id
         t = trac.tickets.get(id)
-        p t
-        @data << [id, t.summary]
+        puts "ticket #{t.id} loaded"
+        @array_controller.addObject(t)
         Dispatch::Queue.main.async do
           @table_view.reloadData
         end
