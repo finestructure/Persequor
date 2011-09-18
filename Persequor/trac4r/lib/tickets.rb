@@ -29,6 +29,15 @@ module Trac
       @trac = trac
     end
     
+    
+    # returns a list of all tickets (the ids), by performing a query
+    # using the given dictionary as query parameters (filters)
+    def filter(options=nil)
+      params = options ? options.join("&") : "status!=closed"
+      @trac.query("ticket.query", params)
+    end
+
+    
     # returns a list of all tickets (the ids), by performing two
     # queries, one for closed tickets, one for opened. use
     #   list :include_closed => false
