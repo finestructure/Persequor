@@ -100,7 +100,7 @@ class MyDocument < NSPersistentDocument
     windowFrame = self.windowForSheet.frame
     windowFrame.size.height += growing ? sizeChange.height : -sizeChange.height
     windowFrame.origin.y -= growing ? sizeChange.height : -sizeChange.height
-    self.windowForSheet.setFrame(windowFrame, display:true, animate:true)
+    self.windowForSheet.setFrame(windowFrame, display:true, animate:false)
     
     table_scroll_view.setAutoresizingMask(old_outline_mask)
     predicate_editor_scroll_view.setAutoresizingMask(old_predicate_editor_mask)
