@@ -135,7 +135,7 @@ class MyDocument < NSPersistentDocument
   end
   
   
-  def load_tickets(trac, ids, n_queues=3)
+  def load_tickets(trac, ids, n_queues=2)
     group = Dispatch::Group.new
     queues = []
     n_queues.times do |i|
