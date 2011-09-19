@@ -112,21 +112,48 @@ class MyDocument < NSPersistentDocument
   
   
   def start_show_progress(max_count)
-    if max_count > 0
-      @progress_bar.setIndeterminate(false)
-      @progress_bar.setMaxValue(max_count)
-    else
-      @progress_bar.setIndeterminate(true)
-      Dispatch::Queue.main.async{ @progress_bar.startAnimation(self) }
+    Dispatch::Queue.main.async do
+      if max_count > 0
+        @progress_bar.setIndeterminate(false)
+        @progress_bar.setDoubleValue(0)
+        @progress_bar.setMaxValue(max_count)
+      else
+        @progress_bar.setIndeterminate(true)
+        @progress_bar.startAnimation(self)
+      end
+      @progress_bar.hidden = false
+      @refresh_button.enabled = false
     end
-    @progress_bar.hidden = false
-    @refresh_button.enabled = false
   end
   
   
   def end_show_progress
-    @progress_bar.hidden = true
-    @refresh_button.enabled = true
+    Dispatch::Queue.main.async do
+      @progress_bar.hidden = true
+      @refresh_button.enabled = true
+    end
+  end
+  
+  
+  def load_tickets(trac, ids, n_queues=3)
+    group = Dispatch::Group.new
+    queues = []
+    n_queues.times do |i|
+      queues << Dispatch::Queue.new("de.abstracture.queue-#{i}")
+    end
+
+    ids.each do |id|
+      queue_id = id % n_queues
+      queues[queue_id].async(group) do
+        t = trac.tickets.get(id)
+        puts "loaded #{id} (queue: #{queue_id})"
+        Dispatch::Queue.main.async do
+          @progress_bar.incrementBy(1)
+          @array_controller.addObject(t)
+        end
+      end
+    end
+    group.wait
   end
   
   
@@ -137,10 +164,11 @@ class MyDocument < NSPersistentDocument
       start_show_progress(0)
 
       # clear array
-      count = @array_controller.arrangedObjects.size
-      index_set = NSIndexSet.indexSetWithIndexesInRange([0, count])
-      p index_set
-      @array_controller.removeObjectsAtArrangedObjectIndexes(index_set)
+      Dispatch::Queue.main.async do
+        count = @array_controller.arrangedObjects.size
+        index_set = NSIndexSet.indexSetWithIndexesInRange([0, count])
+        @array_controller.removeObjectsAtArrangedObjectIndexes(index_set)
+      end
       
       username = defaults("username")
       trac = Trac.new(defaults("tracUrl"),
@@ -151,13 +179,7 @@ class MyDocument < NSPersistentDocument
       tickets = trac.tickets.filter(filter)
       
       start_show_progress(tickets.size)
-      
-      tickets.each do |id|
-        t = trac.tickets.get(id)
-        puts "ticket #{t.id} loaded"
-        @progress_bar.incrementBy(1)
-        @array_controller.addObject(t)
-      end
+      load_tickets(trac, tickets)
       
       end_show_progress
       @is_loading = false

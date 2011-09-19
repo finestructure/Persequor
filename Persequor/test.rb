@@ -35,7 +35,7 @@ end
 
 
 def tickets(trac_url, username, password)
-  version = 4
+  version = 3
   puts "version: #{version}"
 
   trac = Trac.new(trac_url, username, password)
@@ -55,11 +55,16 @@ def tickets(trac_url, username, password)
     end
 
   when 3
+    n_worker = 3
     group = Dispatch::Group.new
-    queue = Dispatch::Queue.new("queue")
+    queues = []
+    n_worker.times do |i|
+      queues << Dispatch::Queue.new("queue-#{i}")
+    end
   
     trac.tickets.filter(['status!=closed']).each do |id|
-      Dispatch::Queue.concurrent.async(group) do
+      queue_id = id % n_worker
+      queues[queue_id].async(group) do
         trac.tickets.get(id)
         puts "loaded #{id}"
       end
