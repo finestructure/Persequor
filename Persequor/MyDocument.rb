@@ -59,17 +59,9 @@ class MyDocument < NSPersistentDocument
   
   
   def predicateEditorChanged(sender)
-    # check for return key
-    event = NSApp.currentEvent
-    if event and event.type == NSKeyDown
-      chars = event.characters
-      if chars.size > 0 and chars[0] == "\r"
-        puts 'return pressed'
-        predicate = @predicate_editor.objectValue
-        p predicate
-        @array_controller.setFilterPredicate(predicate)
-      end
-    end
+    predicate = @predicate_editor.objectValue
+    p predicate.predicateFormat
+    @array_controller.setFilterPredicate(predicate)
     
     # resize window as needed
     new_row_count = @predicate_editor.numberOfRows
