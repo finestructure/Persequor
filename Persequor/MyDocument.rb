@@ -13,6 +13,7 @@ class MyDocument < NSPersistentDocument
   attr_accessor :array_controller
   attr_accessor :predicate_editor
   attr_accessor :previous_row_count
+  attr_accessor :toolbar_view
   attr_accessor :queue
   attr_accessor :refresh_button
   attr_accessor :table_view
@@ -87,9 +88,9 @@ class MyDocument < NSPersistentDocument
     
     sizeChange = @predicate_editor.convertSize([0, heightDiff], toView:nil)
     
-    # offset refresh button
-    frame = @refresh_button.frame
-    @refresh_button.setFrameOrigin(
+    # offset toolbar_view
+    frame = @toolbar_view.frame
+    @toolbar_view.setFrameOrigin(
       [frame.origin.x,
        frame.origin.y \
        - @predicate_editor.rowHeight * (new_row_count - previous_row_count)]
