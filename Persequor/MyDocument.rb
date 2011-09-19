@@ -117,13 +117,20 @@ class MyDocument < NSPersistentDocument
   
   
   def button_pressed(sender)
-    puts 'in here'
+    puts 'loading tickets'
     @queue.async do
+      # clear array
+      count = @array_controller.arrangedObjects.size
+      index_set = NSIndexSet.indexSetWithIndexesInRange([0, count])
+      p index_set
+      @array_controller.removeObjectsAtArrangedObjectIndexes(index_set)
+      
       username = defaults("username")
       trac = Trac.new(defaults("tracUrl"),
                       username,
                       defaults("password"))
-      trac.tickets.filter(["owner=#{username}", "status!=closed"]).each do |id|
+#      trac.tickets.filter(["owner=#{username}", "status!=closed"]).each do |id|
+      trac.tickets.filter(["status!=closed"]).each do |id|
         t = trac.tickets.get(id)
         puts "ticket #{t.id} loaded"
         @array_controller.addObject(t)
