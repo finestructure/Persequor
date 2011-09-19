@@ -11,8 +11,10 @@ require 'trac4r/trac'
 
 class MyDocument < NSPersistentDocument
   attr_accessor :array_controller
+  attr_accessor :is_loading
   attr_accessor :predicate_editor
   attr_accessor :previous_row_count
+  attr_accessor :progress_bar
   attr_accessor :toolbar_view
   attr_accessor :queue
   attr_accessor :refresh_button
@@ -109,9 +111,31 @@ class MyDocument < NSPersistentDocument
   end
   
   
+  def start_show_progress(max_count)
+    if max_count > 0
+      @progress_bar.setIndeterminate(false)
+      @progress_bar.setMaxValue(max_count)
+    else
+      @progress_bar.setIndeterminate(true)
+      Dispatch::Queue.main.async{ @progress_bar.startAnimation(self) }
+    end
+    @progress_bar.hidden = false
+    @refresh_button.enabled = false
+  end
+  
+  
+  def end_show_progress
+    @progress_bar.hidden = true
+    @refresh_button.enabled = true
+  end
+  
+  
   def button_pressed(sender)
     puts 'loading tickets'
     @queue.async do
+      @is_loading = true
+      start_show_progress(0)
+
       # clear array
       count = @array_controller.arrangedObjects.size
       index_set = NSIndexSet.indexSetWithIndexesInRange([0, count])
@@ -122,15 +146,24 @@ class MyDocument < NSPersistentDocument
       trac = Trac.new(defaults("tracUrl"),
                       username,
                       defaults("password"))
-#      trac.tickets.filter(["owner=#{username}", "status!=closed"]).each do |id|
-      trac.tickets.filter(["status!=closed"]).each do |id|
+#     filter = ["owner=#{username}", "status!=closed"]
+      filter = ["status!=closed"]
+      tickets = trac.tickets.filter(filter)
+      
+      start_show_progress(tickets.size)
+      
+      tickets.each do |id|
         t = trac.tickets.get(id)
         puts "ticket #{t.id} loaded"
+        @progress_bar.incrementBy(1)
         @array_controller.addObject(t)
         Dispatch::Queue.main.async do
           @table_view.reloadData
         end
       end
+      
+      end_show_progress
+      @is_loading = false
     end
   end
 
