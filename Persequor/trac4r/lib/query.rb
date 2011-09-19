@@ -45,7 +45,7 @@ module Trac
     
     def query command, *args
       begin
-        return @connection.call(command,*args)
+        return @connection.call_async(command,*args)
       rescue => e
         if e.message =~ /HTTP-Error/
           errorcode = e.message.sub 'HTTP-Error: ',''
