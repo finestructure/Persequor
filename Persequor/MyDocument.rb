@@ -152,7 +152,9 @@ class MyDocument < NSPersistentDocument
         puts "loaded #{id} (queue: #{queue_id})"
         Dispatch::Queue.main.async do
           @progress_bar.incrementBy(1)
+          predicate = @predicate_editor.predicate
           @array_controller.addObject(t)
+          @array_controller.setFilterPredicate(predicate)
         end
       end
     end
