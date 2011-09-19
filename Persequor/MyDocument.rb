@@ -38,15 +38,7 @@ class MyDocument < NSPersistentDocument
 
   def windowControllerDidLoadNib(aController)
     super
-    
-    @predicate_editor.enclosingScrollView.setHasVerticalScroller(false)
-    
-    @previous_row_count = 2
-    @predicate_editor.addRow(self)
-    display_value = @predicate_editor.displayValuesForRow(1).lastObject
-    if display_value.isKindOfClass(NSControl)
-      self.windowForSheet.makeFirstResponder(display_value)
-    end
+    setup_predicate_editor
   end
 
 
@@ -58,6 +50,17 @@ class MyDocument < NSPersistentDocument
   end
 
 
+  def setup_predicate_editor
+    @predicate_editor.enclosingScrollView.setHasVerticalScroller(false)
+    @previous_row_count = 2
+    @predicate_editor.addRow(self)
+    display_value = @predicate_editor.displayValuesForRow(1).lastObject
+    if display_value.isKindOfClass(NSControl)
+      self.windowForSheet.makeFirstResponder(display_value)
+    end
+  end
+
+  
   # actions
   
   
@@ -183,6 +186,15 @@ class MyDocument < NSPersistentDocument
       
       end_show_progress
       @is_loading = false
+    end
+  end
+
+
+  def clear_button_pressed(sender)
+    count = @predicate_editor.numberOfRows
+    while count > 1 do
+      @predicate_editor.removeRowAtIndex(count-1)
+      count -= 1
     end
   end
 
