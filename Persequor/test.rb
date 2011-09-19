@@ -9,13 +9,84 @@
 require 'rubygems'
 require 'yaml'
 require 'trac4r/trac'
+require 'thread'
+
+
+class Array
+  def parallel_map(&block)
+    result = []
+    # Creating a group to synchronize block execution.
+    group = Dispatch::Group.new
+    # We will access the `result` array from within this serial queue,
+    # as without a GIL (Global Interpreter Lock) we cannot assume array access to be thread-safe.
+    result_queue = Dispatch::Queue.new('access-queue.#{result.object_id}')
+    0.upto(self.size) do |idx|
+      # Dispatch a task to the default concurrent queue.
+      Dispatch::Queue.concurrent.async(group) do
+        temp = block[self[idx]]
+        result_queue.async(group) { result[idx] = temp }
+      end
+    end
+    # Wait for all the blocks to finish.
+    group.wait
+    result
+  end
+end
 
 
 def tickets(trac_url, username, password)
+  version = 4
+  puts "version: #{version}"
+
   trac = Trac.new(trac_url, username, password)
-#  trac.query("ticket.query", "status=accepted&status=assigned&status=new&status=reopened&group=owner&col=id&col=summary&col=status&col=owner&col=type&col=priority&col=milestone&col=component&order=priority")
-  trac.tickets.filter(['owner=sas', 'status!=closed']).each do |id|
-    p trac.tickets.get(id)
+
+  case version
+  
+  when 1
+    trac.tickets.filter(['status!=closed']).each do |id|
+      trac.tickets.get(id)
+      puts "loaded #{id}"
+    end
+
+  when 2
+    trac.tickets.filter(['status!=closed']).parallel_map do |id|
+      trac.tickets.get(id)
+      puts "loaded #{id}"
+    end
+
+  when 3
+    group = Dispatch::Group.new
+    queue = Dispatch::Queue.new("queue")
+  
+    trac.tickets.filter(['status!=closed']).each do |id|
+      Dispatch::Queue.concurrent.async(group) do
+        trac.tickets.get(id)
+        puts "loaded #{id}"
+      end
+    end
+    group.wait
+    
+  when 4
+  
+    queue = Queue.new
+    threads = []
+
+    trac.tickets.filter(['status!=closed']).each{ |id| queue << id }
+
+    4.times do
+      threads << Thread.new do
+        until queue.empty?
+          id = queue.pop(true) rescue nil
+          if id
+            trac.tickets.get(id)
+            puts "loaded #{id}"
+          end
+        end
+      end
+    end
+
+    threads.each { |t| t.join }
+    
   end
 end
 
