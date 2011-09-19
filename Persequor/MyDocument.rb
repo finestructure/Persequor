@@ -157,9 +157,6 @@ class MyDocument < NSPersistentDocument
         puts "ticket #{t.id} loaded"
         @progress_bar.incrementBy(1)
         @array_controller.addObject(t)
-        Dispatch::Queue.main.async do
-          @table_view.reloadData
-        end
       end
       
       end_show_progress
