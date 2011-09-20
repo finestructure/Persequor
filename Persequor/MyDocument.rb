@@ -12,10 +12,10 @@ require 'trac4r/trac'
 class MyDocument < NSPersistentDocument
   attr_accessor :array_controller
   attr_accessor :is_loading
-  attr_accessor :predicate
   attr_accessor :predicate_editor
   attr_accessor :previous_row_count
   attr_accessor :progress_bar
+  attr_accessor :query
   attr_accessor :toolbar_view
   attr_accessor :queue
   attr_accessor :refresh_button
@@ -39,8 +39,9 @@ class MyDocument < NSPersistentDocument
 
   def windowControllerDidLoadNib(aController)
     super
-    fetch_data
-    setup_predicate_editor
+    @predicate_editor.enclosingScrollView.setHasVerticalScroller(false)
+    @previous_row_count = 2 # height that's configured in the nib
+    init_query
   end
 
 
@@ -52,16 +53,9 @@ class MyDocument < NSPersistentDocument
   end
 
 
-  def setup_predicate_editor
-    @predicate_editor.enclosingScrollView.setHasVerticalScroller(false)
-    @previous_row_count = 2 # height that's configured in the nib
-    @predicate_editor.setObjectValue(@predicate)
-    predicateEditorChanged(self)
-
-    display_value = @predicate_editor.displayValuesForRow(1).lastObject
-    if display_value.isKindOfClass(NSControl)
-      self.windowForSheet.makeFirstResponder(display_value)
-    end
+  def save_predicate(predicate)
+    data = NSKeyedArchiver.archivedDataWithRootObject(predicate)
+    @query.predicate = data
   end
 
 
@@ -78,33 +72,36 @@ class MyDocument < NSPersistentDocument
   end
 
   
-  def fetch_data
+  def init_query
     request = NSFetchRequest.fetchRequestWithEntityName("Query")
     raise "no request" unless request
     moc = self.managedObjectContext
     raise "no moc" unless moc
     error = Pointer.new_with_type("@")
+
     rows = moc.executeFetchRequest(request, error:error)
-    p rows
+
     if rows == nil or rows == []
       puts "no data"
-      @predicate = default_predicate
+      @query = NSEntityDescription.insertNewObjectForEntityForName(
+        "Query",
+        inManagedObjectContext:moc
+      )
+      predicate = default_predicate
+      save_predicate(predicate)
     else
       puts "got data"
-      @predicate = rows[0].predicate
+      @query = rows[0]
+      data = @query.predicate
+      predicate = NSKeyedUnarchiver.unarchiveObjectWithData(data)
     end
+    
+    @predicate_editor.setObjectValue(predicate)
+    resize_window
   end
 
 
-  # actions
-  
-  
-  def predicateEditorChanged(sender)
-    predicate = @predicate_editor.objectValue
-    p predicate.predicateFormat
-    @array_controller.setFilterPredicate(predicate)
-    
-    # resize window as needed
+  def resize_window
     new_row_count = @predicate_editor.numberOfRows
     
     if new_row_count == previous_row_count
@@ -117,8 +114,12 @@ class MyDocument < NSPersistentDocument
     predicate_editor_scroll_view = @predicate_editor.enclosingScrollView
     old_predicate_editor_mask = predicate_editor_scroll_view.autoresizingMask
     
-    table_scroll_view.setAutoresizingMask(NSViewWidthSizable | NSViewMaxYMargin)
-    predicate_editor_scroll_view.setAutoresizingMask(NSViewWidthSizable | NSViewHeightSizable)
+    table_scroll_view.setAutoresizingMask(
+      NSViewWidthSizable | NSViewMaxYMargin
+    )
+    predicate_editor_scroll_view.setAutoresizingMask(
+      NSViewWidthSizable | NSViewHeightSizable
+    )
     
     growing = new_row_count > previous_row_count
     
@@ -146,6 +147,20 @@ class MyDocument < NSPersistentDocument
     predicate_editor_scroll_view.setAutoresizingMask(old_predicate_editor_mask)
     
     @previous_row_count = new_row_count
+  end
+  
+
+  # actions
+  
+  
+  def predicateEditorChanged(sender)
+    predicate = @predicate_editor.objectValue
+    p predicate.predicateFormat
+    
+    @array_controller.setFilterPredicate(predicate)
+    save_predicate(predicate)
+    
+    resize_window
   end
   
   
