@@ -248,6 +248,7 @@ class MyDocument < NSPersistentDocument
       @predicate_editor.removeRowAtIndex(count-1)
       count -= 1
     end
+    resize_window
   end
 
 end
