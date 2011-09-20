@@ -12,6 +12,7 @@ require 'trac4r/trac'
 class MyDocument < NSPersistentDocument
   attr_accessor :array_controller
   attr_accessor :is_loading
+  attr_accessor :predicate
   attr_accessor :predicate_editor
   attr_accessor :previous_row_count
   attr_accessor :progress_bar
@@ -38,6 +39,7 @@ class MyDocument < NSPersistentDocument
 
   def windowControllerDidLoadNib(aController)
     super
+    fetch_data
     setup_predicate_editor
   end
 
@@ -52,15 +54,48 @@ class MyDocument < NSPersistentDocument
 
   def setup_predicate_editor
     @predicate_editor.enclosingScrollView.setHasVerticalScroller(false)
-    @previous_row_count = 2
-    @predicate_editor.addRow(self)
+    @previous_row_count = 2 # height that's configured in the nib
+    @predicate_editor.setObjectValue(@predicate)
+    predicateEditorChanged(self)
+
     display_value = @predicate_editor.displayValuesForRow(1).lastObject
     if display_value.isKindOfClass(NSControl)
       self.windowForSheet.makeFirstResponder(display_value)
     end
   end
 
+
+  def default_predicate
+    username = defaults("username")
+    if username != nil
+      predicate = NSPredicate.predicateWithFormat(
+      "(owner ==[cd] \"#{username}\") and (status != \"closed\")"
+      )
+    else
+      predicate = NSPredicate.predicateWithFormat('status != \"closed\"')
+    end
+    return predicate
+  end
+
   
+  def fetch_data
+    request = NSFetchRequest.fetchRequestWithEntityName("Query")
+    raise "no request" unless request
+    moc = self.managedObjectContext
+    raise "no moc" unless moc
+    error = Pointer.new_with_type("@")
+    rows = moc.executeFetchRequest(request, error:error)
+    p rows
+    if rows == nil or rows == []
+      puts "no data"
+      @predicate = default_predicate
+    else
+      puts "got data"
+      @predicate = rows[0].predicate
+    end
+  end
+
+
   # actions
   
   

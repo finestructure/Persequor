@@ -3814,8 +3814,8 @@
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="851010830"/>
-							<reference ref="1047415991"/>
 							<reference ref="153194477"/>
+							<reference ref="1047415991"/>
 						</object>
 						<reference key="parent" ref="275939982"/>
 					</object>
@@ -4779,6 +4779,7 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>array_controller</string>
 							<string>is_loading</string>
+							<string>predicate</string>
 							<string>predicate_editor</string>
 							<string>previous_row_count</string>
 							<string>progress_bar</string>
@@ -4789,6 +4790,7 @@
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -4806,6 +4808,7 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>array_controller</string>
 							<string>is_loading</string>
+							<string>predicate</string>
 							<string>predicate_editor</string>
 							<string>previous_row_count</string>
 							<string>progress_bar</string>
@@ -4822,6 +4825,10 @@
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">is_loading</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">predicate</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBToOneOutletInfo">
