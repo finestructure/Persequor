@@ -18,6 +18,15 @@ class TestCoreData < Test::Unit::TestCase
     assert_equal('user == "sas"', obj.predicateFormat)
   end
 
+
+  def test_01_compound_predicate
+    predicate = NSPredicate.predicateWithFormat(
+      '(user == "sas") and (status != closed)'
+    )
+    assert_not_nil(predicate)
+    assert_equal('user == "sas" AND status != closed', predicate.predicateFormat)
+  end
+
 end
 
 
