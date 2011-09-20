@@ -188,7 +188,7 @@ class MyDocument < NSPersistentDocument
   end
   
   
-  def load_tickets(trac, ids, n_queues=2)
+  def fetch_tickets(trac, ids, n_queues=2)
     group = Dispatch::Group.new
     queues = []
     n_queues.times do |i|
@@ -212,7 +212,7 @@ class MyDocument < NSPersistentDocument
   end
   
   
-  def button_pressed(sender)
+  def refresh(sender)
     puts 'loading tickets'
     @queue.async do
       @is_loading = true
@@ -234,7 +234,7 @@ class MyDocument < NSPersistentDocument
       tickets = trac.tickets.filter(filter)
       
       start_show_progress(tickets.size)
-      load_tickets(trac, tickets)
+      fetch_tickets(trac, tickets)
       
       end_show_progress
       @is_loading = false
