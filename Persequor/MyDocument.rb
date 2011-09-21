@@ -7,6 +7,7 @@
 #
 
 require 'trac4r/trac'
+require 'mytrac'
 
 
 class MyDocument < NSPersistentDocument
