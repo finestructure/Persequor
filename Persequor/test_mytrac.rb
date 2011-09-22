@@ -33,7 +33,7 @@ class Test01Trac < Test::Unit::TestCase
 
   def test_02_ticket_changes
     # offset start_time slightly to allow for rounding errors
-    since = @start_time - 0.5
+    since = @start_time - 1
     t = @trac.tickets.get(1)
     assert(t.updated_at.to_time > since)
     assert_equal(1, @trac.tickets.changes(since).size)
@@ -82,6 +82,15 @@ class Test02MyTrac < Test::Unit::TestCase
     assert_not_nil(@trac.update_at)
   end
 
+
+  def test_02_cache_changes
+    @trac.update
+    assert_equal(1, @trac.cache.size)
+    @trac.tickets.create("test", "description")
+    assert_equal(1, @trac.cache.size)
+    @trac.update
+    assert_equal(2, @trac.cache.size)
+  end
 
   
 end

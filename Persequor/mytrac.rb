@@ -25,10 +25,11 @@ class MyTrac < Trac::Base
         #puts "loaded #{id}"
       end
     else
-      since = @update_at
+      # offset since slightly to allow for rounding errors
+      since = @update_at - 1
       @tickets.changes(since).each do |id|
         @cache[id] = @tickets.get(id)
-        puts "updated #{id}"
+        #puts "updated #{id}"
       end
     end
   end
