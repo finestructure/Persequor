@@ -17,12 +17,13 @@ class MyTrac < Trac::Base
     @cache = {}
   end
 
-  def update
+  def update(block=lambda {|id|})
     if @update_at == nil
       @update_at = Time.now
       @tickets.list(:include_closed => false).each do |id|
         @cache[id] = @tickets.get(id)
         #puts "loaded #{id}"
+        block.call(@cache[id])
       end
     else
       # offset since slightly to allow for rounding errors
@@ -30,6 +31,7 @@ class MyTrac < Trac::Base
       @tickets.changes(since).each do |id|
         @cache[id] = @tickets.get(id)
         #puts "updated #{id}"
+        block.call(@cache[id])
       end
     end
   end
