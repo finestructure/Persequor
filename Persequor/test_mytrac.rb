@@ -60,14 +60,22 @@ class Test02MyTrac < Test::Unit::TestCase
   
   def setup
     @trac = MyTrac.new(TRAC_URL, USER, PASS)
+    @trac.tickets.create("test", "description")
+  end
+
+  def teardown
+    # try to clean up
+    @trac.tickets.list.each{ |id| @trac.tickets.delete(id) }
   end
 
 
   def test_01_cache
     assert_equal({}, @trac.cache)
     @trac.update
-    assert_equal({}, @trac.cache)
+    id = 1
+    assert_equal("test", @trac.cache[id].summary)
   end
+
 
   
 end

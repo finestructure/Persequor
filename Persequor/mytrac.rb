@@ -22,7 +22,7 @@ class MyTrac < Trac::Base
       @update_at = Time.now
       @tickets.list(:include_closed => false).each do |id|
         @cache[id] = @tickets.get(id)
-        puts "loaded #{id}"
+        #puts "loaded #{id}"
       end
     else
       since = @update_at
@@ -31,10 +31,6 @@ class MyTrac < Trac::Base
         puts "updated #{id}"
       end
     end
-  end
-
-  def tickets
-    @cache.values
   end
 
 end
