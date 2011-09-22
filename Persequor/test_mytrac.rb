@@ -9,7 +9,7 @@ CONFIG_FILE = File.expand_path '~/.trac.yml'
 
 
 
-class TestTrac < Test::Unit::TestCase
+class TestMyTrac < Test::Unit::TestCase
 
   def setup
     configuration = YAML.load(File.read(CONFIG_FILE))
