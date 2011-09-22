@@ -13,12 +13,14 @@ class Test01Trac < Test::Unit::TestCase
 
   def setup
     @trac = Trac.new(TRAC_URL, USER, PASS)
+    @start_time = Time.now
+    @trac.tickets.list.each{ |id| @trac.tickets.delete(id) }
     @trac.tickets.create("test", "description")
   end
 
   def teardown
     # try to clean up
-    @trac.tickets.list.each{ |id| @trac.tickets.delete(id) }
+    #@trac.tickets.list.each{ |id| @trac.tickets.delete(id) }
   end
   
   def test_01_ticket_create
@@ -30,9 +32,11 @@ class Test01Trac < Test::Unit::TestCase
 
 
   def test_02_ticket_changes
-    since = Time.local(2011,9,1)
-    res = @trac.tickets.changes(since)
-    assert(res.size > 0)
+    # offset start_time slightly to allow for rounding errors
+    since = @start_time - 0.5
+    t = @trac.tickets.get(1)
+    assert(t.updated_at.to_time > since)
+    assert_equal(1, @trac.tickets.changes(since).size)
   end
 
 
