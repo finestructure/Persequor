@@ -98,6 +98,7 @@ class MyDocument < NSPersistentDocument
     end
     
     @predicate_editor.setObjectValue(predicate)
+    @array_controller.setFilterPredicate(predicate)
     resize_window
   end
 
