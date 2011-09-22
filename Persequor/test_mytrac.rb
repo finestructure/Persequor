@@ -56,7 +56,7 @@ end
 
 
 class MyTrac
-  attr_accessor :cache
+  attr_accessor :cache, :update_at
 end
 
 
@@ -75,9 +75,11 @@ class Test02MyTrac < Test::Unit::TestCase
 
   def test_01_cache
     assert_equal({}, @trac.cache)
+    assert_equal(nil, @trac.update_at)
     @trac.update
     id = 1
     assert_equal("test", @trac.cache[id].summary)
+    assert_not_nil(@trac.update_at)
   end
 
 
