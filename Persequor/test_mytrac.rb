@@ -9,17 +9,23 @@ USER = "admin"
 PASS = "admin"
 
 
-class TestMyTrac < Test::Unit::TestCase
+class Test01Trac < Test::Unit::TestCase
 
   def setup
     @trac = Trac.new(TRAC_URL, USER, PASS)
+    @trac.tickets.create("test", "description")
   end
 
+  def teardown
+    # try to clean up
+    @trac.tickets.list.each{ |id| @trac.tickets.delete(id) }
+  end
   
   def test_01_ticket_create
+    before = @trac.tickets.list.size
     @trac.tickets.create("test", "description")
-    ids = @trac.tickets.list
-    assert(ids.size > 0)
+    after = @trac.tickets.list.size
+    assert_equal(before +1, after)
   end
 
 
@@ -42,5 +48,27 @@ class TestMyTrac < Test::Unit::TestCase
     t.desc = 'new description'
   end
 
-
 end
+
+
+class MyTrac
+  attr_accessor :cache
+end
+
+
+class Test02MyTrac < Test::Unit::TestCase
+  
+  def setup
+    @trac = MyTrac.new(TRAC_URL, USER, PASS)
+  end
+
+
+  def test_01_cache
+    assert_equal({}, @trac.cache)
+    @trac.update
+    assert_equal({}, @trac.cache)
+  end
+
+  
+end
+
