@@ -189,7 +189,32 @@ class MyDocument < NSPersistentDocument
   end
   
   
-  def fetch_tickets(trac, ids, n_queues=2)
+  def create_entity(ticket)
+    moc = self.managedObjectContext
+    t = NSEntityDescription.insertNewObjectForEntityForName(
+      "Ticket",
+      inManagedObjectContext:moc
+    )
+    t.id = ticket.id
+    t.severity = ticket.severity
+    t.milestone = ticket.milestone
+    t.status = ticket.status
+    t.priority = ticket.priority
+    t.version = ticket.version
+    t.reporter = ticket.reporter
+    t.owner = ticket.owner
+    t.cc = ticket.cc
+    t.summary = ticket.summary
+    t.desc = ticket.description
+    t.keywords = ticket.keywords
+    t.component = ticket.component
+    #t.created_at = ticket.created_at
+    #t.updated_at = ticket.updated_at
+    return t
+  end
+  
+  
+  def fetch_tickets(trac, ids, n_queues=1)
     group = Dispatch::Group.new
     queues = []
     n_queues.times do |i|
@@ -204,7 +229,7 @@ class MyDocument < NSPersistentDocument
         Dispatch::Queue.main.async do
           @progress_bar.incrementBy(1)
           predicate = @predicate_editor.predicate
-          @array_controller.addObject(t)
+          create_entity(t)
           @array_controller.setFilterPredicate(predicate)
         end
       end
