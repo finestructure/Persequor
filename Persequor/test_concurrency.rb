@@ -88,50 +88,64 @@ class TestNet < Test::Unit::TestCase
   end
 
 
-  def _test_threaded_load_2
+  def test_threaded_load_2
     result = []
     
     ids = @trac.tickets.filter(['status!=closed'])
     result = ids.parallel_map{ |id| @trac.tickets.get(id) }
     
     assert_equal(ids.size, result.size)
-    ids.each_with_index do |index, id|
-      p result[index]
+    ids.each_with_index do |id, index|
+      #p result[index]
       assert_equal(id, result[index].id)
     end
   end
 
 
-  # segfaults for n_queue > 1
-  def _test_threaded_load_3
-    job = Dispatch::Job.new
-  
-    @result = job.synchronize(Array.new)
-    
+  def test_threaded_xmlrpc_1
+    configuration = YAML.load(File.read(CONFIG_FILE))
+    trac_url = configuration[:trac_url]
+    username = configuration[:username]
+    password = configuration[:password]
+
+    result = []
+
     ids = @trac.tickets.filter(['status!=closed'])
-    orig = ids.dup
-    
     n_queues = 4
-    while ids.size > 0
-      n_queues.times do
-        id = ids.pop
-        if id != nil
-          job.add{ 
-            #puts "loaded #{id}"
-            @result << @trac.tickets.get(id)
-          }
+
+    res_group = Dispatch::Group.new
+    res_queues = []
+    n_queues.times do |i|
+       res_queues << Dispatch::Queue.new("res-queue-#{i}")
+    end
+    
+    group = Dispatch::Group.new
+    queues = []
+    n_queues.times do |i|
+      queues << Dispatch::Queue.new("queue-#{i}")
+    end
+  
+    ids.each do |id|
+      queue_id = id % n_queues
+      queues[queue_id].async(group) do
+        res_queues[queue_id].async(group) do
+          trac = Trac.new(trac_url, username, password)
+          t = trac.tickets.get(id)
+          result << t
+          # puts "loaded #{id}"
         end
       end
-      job.join
     end
+    group.wait
+    res_group.wait
     
-    assert_equal(orig.size, @result.size)
-    orig.each_with_index do |index, id|
-      #p @result[index]
-      assert_equal(id, @result[index].id)
+    assert_equal(ids.size, result.size)
+    res_ids = result.map{|i| i.id}
+    ids.each do |id|
+      #p result[index]
+      assert(res_ids.include? id)
     end
   end
-
 
 end
 
