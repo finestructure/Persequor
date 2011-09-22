@@ -115,7 +115,7 @@ module Trac
     
     # returns a list of ids of tickets that have changed since `time'
     def changes time
-      @trac.query("ticket.getRecentChanges",time)
+      @trac.query("ticket.getRecentChanges",time.utc)
     end
     
     # returns a list of attachments for the given ticket
