@@ -100,6 +100,9 @@ class Test02TicketCache < Test::Unit::TestCase
     assert_equal("test", res[0])
     assert_equal("test1", res[1])
     assert_equal("test2", res[2])
+    res = []
+    @cache.update{|t| res << t.summary}
+    assert_equal(0, res.size)
   end
 
   

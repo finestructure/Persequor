@@ -35,10 +35,15 @@ class TicketCache
       # offset since slightly to allow for rounding errors
       since = @updated_at - 1
       @trac.tickets.changes(since).each do |id|
-        @tickets[id] = @trac.tickets.get(id)
-        #puts "updated #{id}"
-        if block_given?
-          yield @tickets[id]
+        ticket = @trac.tickets.get(id)
+        # only update if the ticket is really newer
+        # (could have overlap due to offset above)
+        if (not @tickets.include?(id) or
+            ticket.updated_at.to_time > @tickets[id].updated_at.to_time)
+          @tickets[id] = ticket
+          if block_given?
+            yield ticket
+          end
         end
       end
     end
