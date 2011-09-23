@@ -3465,7 +3465,7 @@
 									<string key="NSFrame">{{183, -1}, {124, 17}}</string>
 									<reference key="NSSuperview" ref="153194477"/>
 									<reference key="NSWindow"/>
-									<reference key="NSNextKeyView" ref="373689179"/>
+									<reference key="NSNextKeyView" ref="969523814"/>
 									<string key="NSReuseIdentifierKey">_NS:3944</string>
 									<bool key="NSEnabled">YES</bool>
 									<object class="NSTextFieldCell" key="NSCell" id="839966720">
@@ -3512,7 +3512,7 @@
 										<int key="NSPeriodicInterval">75</int>
 									</object>
 								</object>
-								<object class="NSButton" id="373689179">
+								<object class="NSButton" id="969523814">
 									<reference key="NSNextResponder" ref="153194477"/>
 									<int key="NSvFlags">265</int>
 									<string key="NSFrame">{{533, -1}, {56, 19}}</string>
@@ -3521,13 +3521,13 @@
 									<reference key="NSNextKeyView" ref="948923134"/>
 									<string key="NSReuseIdentifierKey">_NS:2434</string>
 									<bool key="NSEnabled">YES</bool>
-									<object class="NSButtonCell" key="NSCell" id="718903137">
+									<object class="NSButtonCell" key="NSCell" id="1008557242">
 										<int key="NSCellFlags">-2080244224</int>
 										<int key="NSCellFlags2">134217728</int>
 										<string key="NSContents">Default</string>
 										<reference key="NSSupport" ref="554126109"/>
 										<string key="NSCellIdentifier">_NS:2434</string>
-										<reference key="NSControlView" ref="373689179"/>
+										<reference key="NSControlView" ref="969523814"/>
 										<int key="NSButtonFlags">-2038152961</int>
 										<int key="NSButtonFlags2">164</int>
 										<string key="NSAlternateContents"/>
@@ -3602,7 +3602,6 @@
 				<bool key="NSPreservesSelection">YES</bool>
 				<bool key="NSSelectsInsertedObjects">YES</bool>
 				<bool key="NSFilterRestrictsInsertion">YES</bool>
-				<bool key="NSClearsFilterPredicateOnInsertion">YES</bool>
 			</object>
 			<object class="NSCustomObject" id="796877042">
 				<string key="NSClassName">NSApplication</string>
@@ -3703,7 +3702,7 @@
 					<object class="IBActionConnection" key="connection">
 						<string key="label">default_button_pressed:</string>
 						<reference key="source" ref="512844837"/>
-						<reference key="destination" ref="373689179"/>
+						<reference key="destination" ref="969523814"/>
 					</object>
 					<int key="connectionID">100259</int>
 				</object>
@@ -3762,6 +3761,22 @@
 						</object>
 					</object>
 					<int key="connectionID">100082</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: filterPredicate</string>
+						<reference key="source" ref="845316567"/>
+						<reference key="destination" ref="284171906"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="845316567"/>
+							<reference key="NSDestination" ref="284171906"/>
+							<string key="NSLabel">value: filterPredicate</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">filterPredicate</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">100261</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
@@ -3984,6 +3999,7 @@
 						<int key="objectID">100076</int>
 						<reference key="object" ref="284171906"/>
 						<reference key="parent" ref="0"/>
+						<string key="objectName">Ticket Controller</string>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">100083</int>
@@ -4549,7 +4565,7 @@
 							<reference ref="2931680"/>
 							<reference ref="1009152568"/>
 							<reference ref="62474033"/>
-							<reference ref="373689179"/>
+							<reference ref="969523814"/>
 						</object>
 						<reference key="parent" ref="568628114"/>
 					</object>
@@ -4602,17 +4618,17 @@
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">100256</int>
-						<reference key="object" ref="373689179"/>
+						<reference key="object" ref="969523814"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="718903137"/>
+							<reference ref="1008557242"/>
 						</object>
 						<reference key="parent" ref="153194477"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">100257</int>
-						<reference key="object" ref="718903137"/>
-						<reference key="parent" ref="373689179"/>
+						<reference key="object" ref="1008557242"/>
+						<reference key="parent" ref="969523814"/>
 					</object>
 				</object>
 			</object>
@@ -4849,7 +4865,7 @@
 				<reference key="dict.values" ref="0"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">100259</int>
+			<int key="maxID">100261</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
