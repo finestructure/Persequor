@@ -248,53 +248,19 @@ class MyDocument < NSPersistentDocument
   end
   
   
-  def fetch_tickets(trac, ids, n_queues=1)
-    group = Dispatch::Group.new
-    queues = []
-    n_queues.times do |i|
-      queues << Dispatch::Queue.new("de.abstracture.queue-#{i}")
-    end
-
-    ids.each do |id|
-      queue_id = id % n_queues
-      queues[queue_id].async(group) do
-        t = trac.tickets.get(id)
-        puts "loaded #{id} (queue: #{queue_id})"
-        Dispatch::Queue.main.async do
-          @progress_bar.incrementBy(1)
-          predicate = @predicate_editor.predicate
-          create_entity(t)
-          @array_controller.setFilterPredicate(predicate)
-        end
-      end
-    end
-    group.wait
-  end
-  
-  
   def refresh(sender)
     puts 'loading tickets'
     @queue.async do
       @is_loading = true
       start_show_progress(0)
 
-      # clear array
-      Dispatch::Queue.main.async do
-        count = @array_controller.arrangedObjects.size
-        index_set = NSIndexSet.indexSetWithIndexesInRange([0, count])
-        @array_controller.removeObjectsAtArrangedObjectIndexes(index_set)
+      @ticket_cache.update do |ticket|
+        puts "loaded #{ticket.id}"
+        Dispatch::Queue.main.async do
+          create_entity(ticket)
+          @array_controller.setFilterPredicate(@predicate_editor.predicate)
+        end
       end
-      
-      username = defaults("username")
-      trac = Trac.new(defaults("tracUrl"),
-                      username,
-                      defaults("password"))
-#     filter = ["owner=#{username}", "status!=closed"]
-      filter = ["status!=closed"]
-      tickets = trac.tickets.filter(filter)
-      
-      start_show_progress(tickets.size)
-      fetch_tickets(trac, tickets)
       
       end_show_progress
       @is_loading = false
