@@ -290,6 +290,14 @@ class MyDocument < NSPersistentDocument
   end
 
 
+  def default_button_pressed(sender)
+    predicate = default_predicate
+    @predicate_editor.setObjectValue(predicate)
+    @array_controller.setFilterPredicate(predicate)
+    resize_window
+  end
+
+
   def clear_button_pressed(sender)
     count = @predicate_editor.numberOfRows
     while count > 1 do
