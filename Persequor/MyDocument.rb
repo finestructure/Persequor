@@ -195,9 +195,7 @@ class MyDocument < NSPersistentDocument
   
   
   def predicateEditorChanged(sender)
-    predicate = @predicate_editor.objectValue
-    save_predicate(predicate)    
-    @array_controller.setFilterPredicate(predicate)
+    save_predicate(@predicate_editor.objectValue)    
     resize_window
   end
   
@@ -272,7 +270,6 @@ class MyDocument < NSPersistentDocument
             puts "loaded #{id} #{ticket}"
             @progress_bar.incrementBy(1)
             create_entity(ticket)
-            @array_controller.setFilterPredicate(@predicate_editor.predicate)
           end
         end
       end
