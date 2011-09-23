@@ -17,7 +17,6 @@ class MyDocument < NSPersistentDocument
   attr_accessor :predicate_editor
   attr_accessor :previous_row_count
   attr_accessor :progress_bar
-  attr_accessor :query
   attr_accessor :toolbar_view
   attr_accessor :queue
   attr_accessor :refresh_button
@@ -59,8 +58,25 @@ class MyDocument < NSPersistentDocument
 
 
   def save_predicate(predicate)
+    if @query == nil
+      @query = NSEntityDescription.insertNewObjectForEntityForName(
+        "Query",
+        inManagedObjectContext:self.managedObjectContext
+      )
+    end
     data = NSKeyedArchiver.archivedDataWithRootObject(predicate)
     @query.predicate = data
+  end
+
+
+  def cache_info
+    if @cache_info == nil
+      @cache_info = NSEntityDescription.insertNewObjectForEntityForName(
+        "CacheInfo",
+        inManagedObjectContext:self.managedObjectContext
+      )
+    end
+    return @cache_info
   end
 
 
@@ -92,12 +108,7 @@ class MyDocument < NSPersistentDocument
     rows = fetch_rows("Query")
     
     if rows == nil or rows == []
-      @query = NSEntityDescription.insertNewObjectForEntityForName(
-        "Query",
-        inManagedObjectContext:self.managedObjectContext
-      )
       predicate = default_predicate
-      save_predicate(predicate)
     else
       @query = rows[0]
       data = @query.predicate
@@ -112,14 +123,7 @@ class MyDocument < NSPersistentDocument
 
   def init_cache_info
     rows = fetch_rows("CacheInfo")
-    if rows == nil or rows == []
-      puts "no data"
-      @cache_info = NSEntityDescription.insertNewObjectForEntityForName(
-        "CacheInfo",
-        inManagedObjectContext:self.managedObjectContext
-      )
-    else
-      puts "got data"
+    if rows != []
       @cache_info = rows[0]
     end
   end
@@ -132,7 +136,12 @@ class MyDocument < NSPersistentDocument
     trac = Trac.new(defaults("tracUrl"),
                     defaults("username"),
                     defaults("password"))
-    @ticket_cache = TicketCache.new(trac, tickets, @cache_info.updated_at)
+    if @cache_info == nil
+      updated_at = nil
+    else
+      updated_at = @cache_info.updated_at
+    end
+    @ticket_cache = TicketCache.new(trac, tickets, updated_at)
   end
 
 
@@ -262,7 +271,7 @@ class MyDocument < NSPersistentDocument
         create_entity(ticket)
         @array_controller.setFilterPredicate(@predicate_editor.predicate)
       end
-      @cache_info.updated_at = @ticket_cache.updated_at
+      cache_info.updated_at = @ticket_cache.updated_at
       
       end_show_progress
       @is_loading = false
