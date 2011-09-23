@@ -156,7 +156,6 @@
 													</object>
 													<int key="NSResizingMask">3</int>
 													<bool key="NSIsResizeable">YES</bool>
-													<bool key="NSIsEditable">YES</bool>
 													<reference key="NSTableView" ref="53073219"/>
 												</object>
 												<object class="NSTableColumn" id="794195256">
@@ -191,7 +190,6 @@
 													</object>
 													<int key="NSResizingMask">3</int>
 													<bool key="NSIsResizeable">YES</bool>
-													<bool key="NSIsEditable">YES</bool>
 													<reference key="NSTableView" ref="53073219"/>
 												</object>
 												<object class="NSTableColumn" id="247061989">
@@ -218,7 +216,6 @@
 													</object>
 													<int key="NSResizingMask">3</int>
 													<bool key="NSIsResizeable">YES</bool>
-													<bool key="NSIsEditable">YES</bool>
 													<reference key="NSTableView" ref="53073219"/>
 												</object>
 												<object class="NSTableColumn" id="715546248">
@@ -245,7 +242,6 @@
 													</object>
 													<int key="NSResizingMask">3</int>
 													<bool key="NSIsResizeable">YES</bool>
-													<bool key="NSIsEditable">YES</bool>
 													<reference key="NSTableView" ref="53073219"/>
 												</object>
 												<object class="NSTableColumn" id="648408165">
@@ -272,7 +268,6 @@
 													</object>
 													<int key="NSResizingMask">3</int>
 													<bool key="NSIsResizeable">YES</bool>
-													<bool key="NSIsEditable">YES</bool>
 													<reference key="NSTableView" ref="53073219"/>
 												</object>
 												<object class="NSTableColumn" id="616732511">
@@ -299,7 +294,6 @@
 													</object>
 													<int key="NSResizingMask">3</int>
 													<bool key="NSIsResizeable">YES</bool>
-													<bool key="NSIsEditable">YES</bool>
 													<reference key="NSTableView" ref="53073219"/>
 												</object>
 												<object class="NSTableColumn" id="780577405">
@@ -326,7 +320,6 @@
 													</object>
 													<int key="NSResizingMask">3</int>
 													<bool key="NSIsResizeable">YES</bool>
-													<bool key="NSIsEditable">YES</bool>
 													<reference key="NSTableView" ref="53073219"/>
 												</object>
 											</object>
@@ -3465,7 +3458,7 @@
 									<string key="NSFrame">{{183, -1}, {124, 17}}</string>
 									<reference key="NSSuperview" ref="153194477"/>
 									<reference key="NSWindow"/>
-									<reference key="NSNextKeyView" ref="969523814"/>
+									<reference key="NSNextKeyView" ref="979654584"/>
 									<string key="NSReuseIdentifierKey">_NS:3944</string>
 									<bool key="NSEnabled">YES</bool>
 									<object class="NSTextFieldCell" key="NSCell" id="839966720">
@@ -3512,7 +3505,7 @@
 										<int key="NSPeriodicInterval">75</int>
 									</object>
 								</object>
-								<object class="NSButton" id="969523814">
+								<object class="NSButton" id="979654584">
 									<reference key="NSNextResponder" ref="153194477"/>
 									<int key="NSvFlags">265</int>
 									<string key="NSFrame">{{533, -1}, {56, 19}}</string>
@@ -3521,13 +3514,13 @@
 									<reference key="NSNextKeyView" ref="948923134"/>
 									<string key="NSReuseIdentifierKey">_NS:2434</string>
 									<bool key="NSEnabled">YES</bool>
-									<object class="NSButtonCell" key="NSCell" id="1008557242">
+									<object class="NSButtonCell" key="NSCell" id="884795509">
 										<int key="NSCellFlags">-2080244224</int>
 										<int key="NSCellFlags2">134217728</int>
 										<string key="NSContents">Default</string>
 										<reference key="NSSupport" ref="554126109"/>
 										<string key="NSCellIdentifier">_NS:2434</string>
-										<reference key="NSControlView" ref="969523814"/>
+										<reference key="NSControlView" ref="979654584"/>
 										<int key="NSButtonFlags">-2038152961</int>
 										<int key="NSButtonFlags2">164</int>
 										<string key="NSAlternateContents"/>
@@ -3702,7 +3695,7 @@
 					<object class="IBActionConnection" key="connection">
 						<string key="label">default_button_pressed:</string>
 						<reference key="source" ref="512844837"/>
-						<reference key="destination" ref="969523814"/>
+						<reference key="destination" ref="979654584"/>
 					</object>
 					<int key="connectionID">100259</int>
 				</object>
@@ -4565,7 +4558,7 @@
 							<reference ref="2931680"/>
 							<reference ref="1009152568"/>
 							<reference ref="62474033"/>
-							<reference ref="969523814"/>
+							<reference ref="979654584"/>
 						</object>
 						<reference key="parent" ref="568628114"/>
 					</object>
@@ -4618,17 +4611,17 @@
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">100256</int>
-						<reference key="object" ref="969523814"/>
+						<reference key="object" ref="979654584"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="1008557242"/>
+							<reference ref="884795509"/>
 						</object>
 						<reference key="parent" ref="153194477"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">100257</int>
-						<reference key="object" ref="1008557242"/>
-						<reference key="parent" ref="969523814"/>
+						<reference key="object" ref="884795509"/>
+						<reference key="parent" ref="979654584"/>
 					</object>
 				</object>
 			</object>
