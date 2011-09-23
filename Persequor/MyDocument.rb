@@ -250,17 +250,19 @@ class MyDocument < NSPersistentDocument
   
   def refresh(sender)
     puts 'loading tickets'
+    if @is_loading
+      return
+    end
     @queue.async do
       @is_loading = true
       start_show_progress(0)
 
       @ticket_cache.update do |ticket|
         puts "loaded #{ticket.id}"
-        Dispatch::Queue.main.async do
-          create_entity(ticket)
-          @array_controller.setFilterPredicate(@predicate_editor.predicate)
-        end
+        create_entity(ticket)
+        @array_controller.setFilterPredicate(@predicate_editor.predicate)
       end
+      @cache_info.updated_at = @ticket_cache.updated_at
       
       end_show_progress
       @is_loading = false
