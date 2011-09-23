@@ -243,8 +243,8 @@ class MyDocument < NSPersistentDocument
     t.desc = ticket.description
     t.keywords = ticket.keywords
     t.component = ticket.component
-    #t.created_at = ticket.created_at
-    #t.updated_at = ticket.updated_at
+    t.created_at = ticket.created_at.to_time
+    t.updated_at = ticket.updated_at.to_time
     return t
   end
   
