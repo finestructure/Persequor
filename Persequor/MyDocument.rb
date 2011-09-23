@@ -12,16 +12,12 @@ require 'mytrac'
 
 class MyDocument < NSPersistentDocument
   attr_accessor :array_controller
-  attr_accessor :cache_info
-  attr_accessor :is_loading
   attr_accessor :predicate_editor
-  attr_accessor :previous_row_count
   attr_accessor :progress_bar
   attr_accessor :toolbar_view
-  attr_accessor :queue
   attr_accessor :refresh_button
   attr_accessor :table_view
-  attr_accessor :ticket_cache
+
 
   def init
   	super
@@ -148,7 +144,7 @@ class MyDocument < NSPersistentDocument
   def resize_window
     new_row_count = @predicate_editor.numberOfRows
     
-    if new_row_count == previous_row_count
+    if new_row_count == @previous_row_count
       return
     end
     
@@ -165,7 +161,7 @@ class MyDocument < NSPersistentDocument
       NSViewWidthSizable | NSViewHeightSizable
     )
     
-    growing = new_row_count > previous_row_count
+    growing = new_row_count > @previous_row_count
     
     heightDiff = @predicate_editor.rowHeight \
       * (new_row_count - @previous_row_count)
@@ -178,7 +174,7 @@ class MyDocument < NSPersistentDocument
     @toolbar_view.setFrameOrigin(
       [frame.origin.x,
        frame.origin.y \
-       - @predicate_editor.rowHeight * (new_row_count - previous_row_count)]
+       - @predicate_editor.rowHeight * (new_row_count - @previous_row_count)]
     )
     
     # change window frame size
