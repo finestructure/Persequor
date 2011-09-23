@@ -14,9 +14,10 @@ class TicketCache
   attr_accessor :tickets
   attr_accessor :updated_at
 
-  def initialize(trac, tickets={}, updated_at=nil)
+  def initialize(trac, tickets=[], updated_at=nil)
     @trac = trac
-    @tickets = tickets
+    @tickets = {}
+    tickets.each{ |t| @tickets[t.id] = t }
     @updated_at = updated_at
   end
 

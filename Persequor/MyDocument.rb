@@ -12,6 +12,7 @@ require 'mytrac'
 
 class MyDocument < NSPersistentDocument
   attr_accessor :array_controller
+  attr_accessor :cache_info
   attr_accessor :is_loading
   attr_accessor :predicate_editor
   attr_accessor :previous_row_count
@@ -21,6 +22,7 @@ class MyDocument < NSPersistentDocument
   attr_accessor :queue
   attr_accessor :refresh_button
   attr_accessor :table_view
+  attr_accessor :ticket_cache
 
   def init
   	super
@@ -43,6 +45,8 @@ class MyDocument < NSPersistentDocument
     @predicate_editor.enclosingScrollView.setHasVerticalScroller(false)
     @previous_row_count = 2 # height that's configured in the nib
     init_query
+    init_cache_info
+    init_ticket_cache
   end
 
 
@@ -73,25 +77,28 @@ class MyDocument < NSPersistentDocument
   end
 
   
-  def init_query
-    request = NSFetchRequest.fetchRequestWithEntityName("Query")
+  def fetch_rows(entity_name)
+    request = NSFetchRequest.fetchRequestWithEntityName(entity_name)
     raise "no request" unless request
     moc = self.managedObjectContext
     raise "no moc" unless moc
     error = Pointer.new_with_type("@")
-
     rows = moc.executeFetchRequest(request, error:error)
-
+    return rows
+  end
+  
+  
+  def init_query
+    rows = fetch_rows("Query")
+    
     if rows == nil or rows == []
-      puts "no data"
       @query = NSEntityDescription.insertNewObjectForEntityForName(
         "Query",
-        inManagedObjectContext:moc
+        inManagedObjectContext:self.managedObjectContext
       )
       predicate = default_predicate
       save_predicate(predicate)
     else
-      puts "got data"
       @query = rows[0]
       data = @query.predicate
       predicate = NSKeyedUnarchiver.unarchiveObjectWithData(data)
@@ -100,6 +107,32 @@ class MyDocument < NSPersistentDocument
     @predicate_editor.setObjectValue(predicate)
     @array_controller.setFilterPredicate(predicate)
     resize_window
+  end
+
+
+  def init_cache_info
+    rows = fetch_rows("CacheInfo")
+    if rows == nil or rows == []
+      puts "no data"
+      @cache_info = NSEntityDescription.insertNewObjectForEntityForName(
+        "CacheInfo",
+        inManagedObjectContext:self.managedObjectContext
+      )
+    else
+      puts "got data"
+      @cache_info = rows[0]
+    end
+  end
+
+
+  def init_ticket_cache
+    tickets = fetch_rows("Ticket")
+    puts "tickets loaded: #{tickets.size}"
+    
+    trac = Trac.new(defaults("tracUrl"),
+                    defaults("username"),
+                    defaults("password"))
+    @ticket_cache = TicketCache.new(trac, tickets, @cache_info.updated_at)
   end
 
 
