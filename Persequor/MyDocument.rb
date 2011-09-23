@@ -196,11 +196,8 @@ class MyDocument < NSPersistentDocument
   
   def predicateEditorChanged(sender)
     predicate = @predicate_editor.objectValue
-    p predicate.predicateFormat
-    
+    save_predicate(predicate)    
     @array_controller.setFilterPredicate(predicate)
-    save_predicate(predicate)
-    
     resize_window
   end
   
