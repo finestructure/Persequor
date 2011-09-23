@@ -21,13 +21,15 @@ class TicketCache
     @updated_at = updated_at
   end
 
-  def update(block=lambda {|ticket|})
+  def update(&block)
     if @updated_at == nil
       @updated_at = Time.now
       @trac.tickets.list(:include_closed => false).each do |id|
         @tickets[id] = @trac.tickets.get(id)
-        #puts "loaded #{id}"
-        block.call(@tickets[id])
+        #puts "loaded: #{id} #{@tickets[id]}"
+        if block_given?
+          yield @tickets[id]
+        end
       end
     else
       # offset since slightly to allow for rounding errors
@@ -35,7 +37,9 @@ class TicketCache
       @trac.tickets.changes(since).each do |id|
         @tickets[id] = @trac.tickets.get(id)
         #puts "updated #{id}"
-        block.call(@tickets[id])
+        if block_given?
+          yield @tickets[id]
+        end
       end
     end
   end

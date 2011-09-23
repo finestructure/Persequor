@@ -90,6 +90,18 @@ class Test02TicketCache < Test::Unit::TestCase
     assert_equal(2, @cache.tickets.size)
   end
 
+
+  def test_03_update_block
+    @trac.tickets.create("test1", "description")
+    @trac.tickets.create("test2", "description")
+    res = []
+    @cache.update{|t| res << t.summary}
+    assert_equal(3, res.size)
+    assert_equal("test", res[0])
+    assert_equal("test1", res[1])
+    assert_equal("test2", res[2])
+  end
+
   
 end
 
