@@ -10,28 +10,31 @@ class Trac::Ticket
 end
 
 
-class MyTrac < Trac::Base
+class TicketCache
+  attr_accessor :tickets
+  attr_accessor :updated_at
 
-  def initialize(*args)
-    super(*args)
-    @cache = {}
+  def initialize(trac, tickets={}, updated_at=nil)
+    @trac = trac
+    @tickets = tickets
+    @updated_at = updated_at
   end
 
   def update(block=lambda {|id|})
-    if @update_at == nil
-      @update_at = Time.now
-      @tickets.list(:include_closed => false).each do |id|
-        @cache[id] = @tickets.get(id)
+    if @updated_at == nil
+      @updated_at = Time.now
+      @trac.tickets.list(:include_closed => false).each do |id|
+        @tickets[id] = @trac.tickets.get(id)
         #puts "loaded #{id}"
-        block.call(@cache[id])
+        block.call(@tickets[id])
       end
     else
       # offset since slightly to allow for rounding errors
-      since = @update_at - 1
-      @tickets.changes(since).each do |id|
-        @cache[id] = @tickets.get(id)
+      since = @updated_at - 1
+      @trac.tickets.changes(since).each do |id|
+        @tickets[id] = @trac.tickets.get(id)
         #puts "updated #{id}"
-        block.call(@cache[id])
+        block.call(@tickets[id])
       end
     end
   end
