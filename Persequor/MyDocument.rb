@@ -296,6 +296,7 @@ class MyDocument < NSPersistentDocument
       @predicate_editor.removeRowAtIndex(count-1)
       count -= 1
     end
+    @array_controller.setFilterPredicate(@predicate_editor.predicate)
     resize_window
   end
 
