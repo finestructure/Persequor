@@ -30,6 +30,7 @@
 			<string>NSView</string>
 			<string>NSWindowTemplate</string>
 			<string>NSTableColumn</string>
+			<string>NSTextField</string>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -141,7 +142,7 @@
 															<int key="NSColorSpace">6</int>
 															<string key="NSCatalogName">System</string>
 															<string key="NSColorName">controlBackgroundColor</string>
-															<object class="NSColor" key="NSColor">
+															<object class="NSColor" key="NSColor" id="896933814">
 																<int key="NSColorSpace">3</int>
 																<bytes key="NSWhite">MC42NjY2NjY2NjY3AA</bytes>
 															</object>
@@ -3458,6 +3459,31 @@
 							<int key="NSvFlags">270</int>
 							<object class="NSMutableArray" key="NSSubviews">
 								<bool key="EncodedWithXMLCoder">YES</bool>
+								<object class="NSTextField" id="62474033">
+									<reference key="NSNextResponder" ref="153194477"/>
+									<int key="NSvFlags">-2147483380</int>
+									<string key="NSFrame">{{183, -1}, {124, 17}}</string>
+									<reference key="NSSuperview" ref="153194477"/>
+									<reference key="NSWindow"/>
+									<reference key="NSNextKeyView" ref="948923134"/>
+									<string key="NSReuseIdentifierKey">_NS:3944</string>
+									<bool key="NSEnabled">YES</bool>
+									<object class="NSTextFieldCell" key="NSCell" id="839966720">
+										<int key="NSCellFlags">68288064</int>
+										<int key="NSCellFlags2">272630784</int>
+										<string key="NSContents">Refreshing cache...</string>
+										<reference key="NSSupport" ref="26"/>
+										<string key="NSCellIdentifier">_NS:3944</string>
+										<reference key="NSControlView" ref="62474033"/>
+										<object class="NSColor" key="NSBackgroundColor">
+											<int key="NSColorSpace">6</int>
+											<string key="NSCatalogName">System</string>
+											<string key="NSColorName">controlColor</string>
+											<reference key="NSColor" ref="896933814"/>
+										</object>
+										<reference key="NSTextColor" ref="912613331"/>
+									</object>
+								</object>
 								<object class="NSButton" id="2931680">
 									<reference key="NSNextResponder" ref="153194477"/>
 									<int key="NSvFlags">268</int>
@@ -3517,7 +3543,7 @@
 									<string key="NSFrame">{{84, -1}, {96, 20}}</string>
 									<reference key="NSSuperview" ref="153194477"/>
 									<reference key="NSWindow"/>
-									<reference key="NSNextKeyView" ref="948923134"/>
+									<reference key="NSNextKeyView" ref="62474033"/>
 									<bool key="NSViewCanDrawConcurrently">YES</bool>
 									<string key="NSReuseIdentifierKey">_NS:2352</string>
 									<int key="NSpiFlags">16394</int>
@@ -3640,6 +3666,14 @@
 						<reference key="destination" ref="2931680"/>
 					</object>
 					<int key="connectionID">100249</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">progress_label</string>
+						<reference key="source" ref="512844837"/>
+						<reference key="destination" ref="62474033"/>
+					</object>
+					<int key="connectionID">100255</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -4482,6 +4516,7 @@
 							<reference ref="948923134"/>
 							<reference ref="2931680"/>
 							<reference ref="1009152568"/>
+							<reference ref="62474033"/>
 						</object>
 						<reference key="parent" ref="568628114"/>
 					</object>
@@ -4517,6 +4552,20 @@
 						<int key="objectID">100246</int>
 						<reference key="object" ref="634385744"/>
 						<reference key="parent" ref="2931680"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">100253</int>
+						<reference key="object" ref="62474033"/>
+						<object class="NSMutableArray" key="children">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<reference ref="839966720"/>
+						</object>
+						<reference key="parent" ref="153194477"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">100254</int>
+						<reference key="object" ref="839966720"/>
+						<reference key="parent" ref="62474033"/>
 					</object>
 				</object>
 			</object>
@@ -4621,6 +4670,8 @@
 					<string>100243.IBPluginDependency</string>
 					<string>100245.IBPluginDependency</string>
 					<string>100246.IBPluginDependency</string>
+					<string>100253.IBPluginDependency</string>
+					<string>100254.IBPluginDependency</string>
 					<string>5.IBPluginDependency</string>
 					<string>5.IBWindowTemplateEditedContentRect</string>
 					<string>6.IBPluginDependency</string>
@@ -4729,6 +4780,8 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{133, 170}, {507, 413}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 				</object>
@@ -4745,7 +4798,7 @@
 				<reference key="dict.values" ref="0"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">100252</int>
+			<int key="maxID">100255</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -4797,21 +4850,15 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>array_controller</string>
-							<string>is_loading</string>
 							<string>predicate_editor</string>
-							<string>previous_row_count</string>
 							<string>progress_bar</string>
-							<string>query</string>
-							<string>queue</string>
+							<string>progress_label</string>
 							<string>refresh_button</string>
 							<string>table_view</string>
 							<string>toolbar_view</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -4826,12 +4873,9 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>array_controller</string>
-							<string>is_loading</string>
 							<string>predicate_editor</string>
-							<string>previous_row_count</string>
 							<string>progress_bar</string>
-							<string>query</string>
-							<string>queue</string>
+							<string>progress_label</string>
 							<string>refresh_button</string>
 							<string>table_view</string>
 							<string>toolbar_view</string>
@@ -4843,15 +4887,7 @@
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBToOneOutletInfo">
-								<string key="name">is_loading</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBToOneOutletInfo">
 								<string key="name">predicate_editor</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">previous_row_count</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBToOneOutletInfo">
@@ -4859,11 +4895,7 @@
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBToOneOutletInfo">
-								<string key="name">query</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">queue</string>
+								<string key="name">progress_label</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBToOneOutletInfo">

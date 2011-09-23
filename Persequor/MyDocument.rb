@@ -14,6 +14,7 @@ class MyDocument < NSPersistentDocument
   attr_accessor :array_controller
   attr_accessor :predicate_editor
   attr_accessor :progress_bar
+  attr_accessor :progress_label
   attr_accessor :toolbar_view
   attr_accessor :refresh_button
   attr_accessor :table_view
@@ -217,6 +218,7 @@ class MyDocument < NSPersistentDocument
       @progress_bar.hidden = false
       @refresh_button.enabled = false
     end
+      @progress_label.hidden = false
   end
   
   
@@ -225,6 +227,7 @@ class MyDocument < NSPersistentDocument
       @progress_bar.hidden = true
       @refresh_button.enabled = true
     end
+      @progress_label.hidden = true
   end
   
   
