@@ -21,7 +21,7 @@ class TicketCache
     @updated_at = updated_at
   end
 
-  def update(block=lambda {|id|})
+  def update(block=lambda {|ticket|})
     if @updated_at == nil
       @updated_at = Time.now
       @trac.tickets.list(:include_closed => false).each do |id|
