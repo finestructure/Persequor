@@ -265,10 +265,19 @@ class MyDocument < NSPersistentDocument
       @is_loading = true
       start_show_progress(0)
 
-      @ticket_cache.update do |ticket|
-        puts "loaded #{ticket.id}"
-        create_entity(ticket)
-        @array_controller.setFilterPredicate(@predicate_editor.predicate)
+      new_tickets = @ticket_cache.updates
+      start_show_progress(new_tickets.size)
+
+      new_tickets.each do |id|
+        ticket = @ticket_cache.fetch(id)
+        if ticket != nil
+          Dispatch::Queue.main.async do
+            puts "loaded #{id} #{ticket}"
+            @progress_bar.incrementBy(1)
+            create_entity(ticket)
+            @array_controller.setFilterPredicate(@predicate_editor.predicate)
+          end
+        end
       end
       cache_info.updated_at = @ticket_cache.updated_at
       

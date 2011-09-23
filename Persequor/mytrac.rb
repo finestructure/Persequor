@@ -49,6 +49,31 @@ class TicketCache
     end
   end
 
+
+  def updates
+    if @updated_at == nil
+      @updated_at = Time.now
+      return @trac.tickets.list(:include_closed => false)
+    else
+      # offset since slightly to allow for rounding errors
+      since = @updated_at - 1
+      return @trac.tickets.changes(since)
+    end
+  end
+
+
+  def fetch(id)
+    ticket = @trac.tickets.get(id)
+    # only update if the ticket is really newer
+    # (could have overlap due to offset above)
+    if (not @tickets.include?(id) or
+        ticket.updated_at.to_time > @tickets[id].updated_at.to_time)
+      @tickets[id] = ticket
+      return ticket
+    else
+      return nil
+    end
+  end
 end
 
 
