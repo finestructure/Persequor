@@ -279,7 +279,10 @@ class MyDocument < NSPersistentDocument
           end
         end
       end
-      cache_info.updated_at = @ticket_cache.updated_at
+      if new_tickets.size > 0
+        # don't mark dirty if there were no changes
+        cache_info.updated_at = @ticket_cache.updated_at
+      end
       
       end_show_progress
       @is_loading = false
