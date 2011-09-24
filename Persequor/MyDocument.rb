@@ -12,15 +12,14 @@ require 'mytrac'
 
 class MyDocument < NSPersistentDocument
   attr_accessor :array_controller
-  attr_accessor :is_loading
+  attr_accessor :column_menu
   attr_accessor :predicate_editor
-  attr_accessor :previous_row_count
   attr_accessor :progress_bar
-  attr_accessor :query
+  attr_accessor :progress_label
   attr_accessor :toolbar_view
-  attr_accessor :queue
   attr_accessor :refresh_button
   attr_accessor :table_view
+
 
   def init
   	super
@@ -32,8 +31,6 @@ class MyDocument < NSPersistentDocument
 
 
   def windowNibName
-    # Override returning the nib file name of the document
-    # If you need to use a subclass of NSWindowController or if your document supports multiple NSWindowControllers, you should remove this method and override -makeWindowControllers instead.
     "MyDocument"
   end
 
@@ -42,11 +39,27 @@ class MyDocument < NSPersistentDocument
     super
     @predicate_editor.enclosingScrollView.setHasVerticalScroller(false)
     @previous_row_count = 2 # height that's configured in the nib
+    init_column_menu
     init_query
+    init_cache_info
+    init_ticket_cache
   end
 
 
   # helpers
+  
+  
+  def init_column_menu
+    @column_menu.removeAllItems
+    @table_view.tableColumns.each do |col|
+      item = NSMenuItem.alloc.initWithTitle(col.identifier,
+        action:'column_menu_item_selected:', keyEquivalent:"")
+      item.state = col.isHidden ? NSOffState : NSOnState
+      item.enabled = true
+      @column_menu.addItem(item)
+    end
+  end
+  
   
   def defaults(key)
     defaults = NSUserDefaults.standardUserDefaults
@@ -55,8 +68,25 @@ class MyDocument < NSPersistentDocument
 
 
   def save_predicate(predicate)
+    if @query == nil
+      @query = NSEntityDescription.insertNewObjectForEntityForName(
+        "Query",
+        inManagedObjectContext:self.managedObjectContext
+      )
+    end
     data = NSKeyedArchiver.archivedDataWithRootObject(predicate)
     @query.predicate = data
+  end
+
+
+  def cache_info
+    if @cache_info == nil
+      @cache_info = NSEntityDescription.insertNewObjectForEntityForName(
+        "CacheInfo",
+        inManagedObjectContext:self.managedObjectContext
+      )
+    end
+    return @cache_info
   end
 
 
@@ -73,39 +103,62 @@ class MyDocument < NSPersistentDocument
   end
 
   
-  def init_query
-    request = NSFetchRequest.fetchRequestWithEntityName("Query")
+  def fetch_rows(entity_name)
+    request = NSFetchRequest.fetchRequestWithEntityName(entity_name)
     raise "no request" unless request
     moc = self.managedObjectContext
     raise "no moc" unless moc
     error = Pointer.new_with_type("@")
-
     rows = moc.executeFetchRequest(request, error:error)
-
+    return rows
+  end
+  
+  
+  def init_query
+    rows = fetch_rows("Query")
+    
     if rows == nil or rows == []
-      puts "no data"
-      @query = NSEntityDescription.insertNewObjectForEntityForName(
-        "Query",
-        inManagedObjectContext:moc
-      )
       predicate = default_predicate
-      save_predicate(predicate)
     else
-      puts "got data"
       @query = rows[0]
       data = @query.predicate
       predicate = NSKeyedUnarchiver.unarchiveObjectWithData(data)
     end
     
     @predicate_editor.setObjectValue(predicate)
+    @array_controller.setFilterPredicate(predicate)
     resize_window
+  end
+
+
+  def init_cache_info
+    rows = fetch_rows("CacheInfo")
+    if rows != []
+      @cache_info = rows[0]
+    end
+  end
+
+
+  def init_ticket_cache
+    tickets = fetch_rows("Ticket")
+    puts "tickets loaded: #{tickets.size}"
+    
+    trac = Trac.new(defaults("tracUrl"),
+                    defaults("username"),
+                    defaults("password"))
+    if @cache_info == nil
+      updated_at = nil
+    else
+      updated_at = @cache_info.updated_at
+    end
+    @ticket_cache = TicketCache.new(trac, tickets, updated_at)
   end
 
 
   def resize_window
     new_row_count = @predicate_editor.numberOfRows
     
-    if new_row_count == previous_row_count
+    if new_row_count == @previous_row_count
       return
     end
     
@@ -122,7 +175,7 @@ class MyDocument < NSPersistentDocument
       NSViewWidthSizable | NSViewHeightSizable
     )
     
-    growing = new_row_count > previous_row_count
+    growing = new_row_count > @previous_row_count
     
     heightDiff = @predicate_editor.rowHeight \
       * (new_row_count - @previous_row_count)
@@ -135,7 +188,7 @@ class MyDocument < NSPersistentDocument
     @toolbar_view.setFrameOrigin(
       [frame.origin.x,
        frame.origin.y \
-       - @predicate_editor.rowHeight * (new_row_count - previous_row_count)]
+       - @predicate_editor.rowHeight * (new_row_count - @previous_row_count)]
     )
     
     # change window frame size
@@ -155,12 +208,7 @@ class MyDocument < NSPersistentDocument
   
   
   def predicateEditorChanged(sender)
-    predicate = @predicate_editor.objectValue
-    p predicate.predicateFormat
-    
-    @array_controller.setFilterPredicate(predicate)
-    save_predicate(predicate)
-    
+    save_predicate(@predicate_editor.objectValue)    
     resize_window
   end
   
@@ -178,6 +226,7 @@ class MyDocument < NSPersistentDocument
       @progress_bar.hidden = false
       @refresh_button.enabled = false
     end
+      @progress_label.hidden = false
   end
   
   
@@ -186,60 +235,73 @@ class MyDocument < NSPersistentDocument
       @progress_bar.hidden = true
       @refresh_button.enabled = true
     end
+      @progress_label.hidden = true
   end
   
   
-  def fetch_tickets(trac, ids, n_queues=2)
-    group = Dispatch::Group.new
-    queues = []
-    n_queues.times do |i|
-      queues << Dispatch::Queue.new("de.abstracture.queue-#{i}")
-    end
-
-    ids.each do |id|
-      queue_id = id % n_queues
-      queues[queue_id].async(group) do
-        t = trac.tickets.get(id)
-        puts "loaded #{id} (queue: #{queue_id})"
-        Dispatch::Queue.main.async do
-          @progress_bar.incrementBy(1)
-          predicate = @predicate_editor.predicate
-          @array_controller.addObject(t)
-          @array_controller.setFilterPredicate(predicate)
-        end
-      end
-    end
-    group.wait
+  def create_entity(ticket)
+    moc = self.managedObjectContext
+    t = NSEntityDescription.insertNewObjectForEntityForName(
+      "Ticket",
+      inManagedObjectContext:moc
+    )
+    t.id = ticket.id
+    t.severity = ticket.severity
+    t.milestone = ticket.milestone
+    t.status = ticket.status
+    t.priority = ticket.priority
+    t.version = ticket.version
+    t.reporter = ticket.reporter
+    t.owner = ticket.owner
+    t.cc = ticket.cc
+    t.summary = ticket.summary
+    t.desc = ticket.description
+    t.keywords = ticket.keywords
+    t.component = ticket.component
+    t.created_at = ticket.created_at.to_time
+    t.updated_at = ticket.updated_at.to_time
+    return t
   end
   
   
   def refresh(sender)
     puts 'loading tickets'
+    if @is_loading
+      return
+    end
     @queue.async do
       @is_loading = true
       start_show_progress(0)
 
-      # clear array
-      Dispatch::Queue.main.async do
-        count = @array_controller.arrangedObjects.size
-        index_set = NSIndexSet.indexSetWithIndexesInRange([0, count])
-        @array_controller.removeObjectsAtArrangedObjectIndexes(index_set)
+      new_tickets = @ticket_cache.updates
+      start_show_progress(new_tickets.size)
+
+      new_tickets.each do |id|
+        ticket = @ticket_cache.fetch(id)
+        if ticket != nil
+          Dispatch::Queue.main.async do
+            puts "loaded #{id} #{ticket}"
+            @progress_bar.incrementBy(1)
+            create_entity(ticket)
+          end
+        end
       end
-      
-      username = defaults("username")
-      trac = Trac.new(defaults("tracUrl"),
-                      username,
-                      defaults("password"))
-#     filter = ["owner=#{username}", "status!=closed"]
-      filter = ["status!=closed"]
-      tickets = trac.tickets.filter(filter)
-      
-      start_show_progress(tickets.size)
-      fetch_tickets(trac, tickets)
+      if new_tickets.size > 0
+        # don't mark dirty if there were no changes
+        cache_info.updated_at = @ticket_cache.updated_at
+      end
       
       end_show_progress
       @is_loading = false
     end
+  end
+
+
+  def default_button_pressed(sender)
+    predicate = default_predicate
+    @predicate_editor.setObjectValue(predicate)
+    @array_controller.setFilterPredicate(predicate)
+    resize_window
   end
 
 
@@ -249,7 +311,22 @@ class MyDocument < NSPersistentDocument
       @predicate_editor.removeRowAtIndex(count-1)
       count -= 1
     end
+    @array_controller.setFilterPredicate(@predicate_editor.predicate)
     resize_window
+  end
+
+  
+  def column_menu_item_selected(menu_item)
+    col = @table_view.tableColumnWithIdentifier(menu_item.title)
+    return if col == nil
+    case menu_item.state
+    when NSOffState
+      col.setHidden(false)
+      menu_item.state = NSOnState
+    when NSOnState
+      col.setHidden(true)
+      menu_item.state = NSOffState
+    end
   end
 
 end

@@ -55,16 +55,14 @@ class Test01Trac < Test::Unit::TestCase
 end
 
 
-class MyTrac
-  attr_accessor :cache, :update_at
-end
 
-
-class Test02MyTrac < Test::Unit::TestCase
+class Test02TicketCache < Test::Unit::TestCase
   
   def setup
-    @trac = MyTrac.new(TRAC_URL, USER, PASS)
+    @trac = Trac.new(TRAC_URL, USER, PASS)
     @trac.tickets.create("test", "description")
+    
+    @cache = TicketCache.new(@trac)
   end
 
   def teardown
@@ -74,22 +72,37 @@ class Test02MyTrac < Test::Unit::TestCase
 
 
   def test_01_cache
-    assert_equal({}, @trac.cache)
-    assert_equal(nil, @trac.update_at)
-    @trac.update
+    assert_equal({}, @cache.tickets)
+    assert_equal(nil, @cache.updated_at)
+    @cache.update
     id = 1
-    assert_equal("test", @trac.cache[id].summary)
-    assert_not_nil(@trac.update_at)
+    assert_equal("test", @cache.tickets[id].summary)
+    assert_not_nil(@cache.updated_at)
   end
 
 
   def test_02_cache_changes
-    @trac.update
-    assert_equal(1, @trac.cache.size)
+    @cache.update
+    assert_equal(1, @cache.tickets.size)
     @trac.tickets.create("test", "description")
-    assert_equal(1, @trac.cache.size)
-    @trac.update
-    assert_equal(2, @trac.cache.size)
+    assert_equal(1, @cache.tickets.size)
+    @cache.update
+    assert_equal(2, @cache.tickets.size)
+  end
+
+
+  def test_03_update_block
+    @trac.tickets.create("test1", "description")
+    @trac.tickets.create("test2", "description")
+    res = []
+    @cache.update{|t| res << t.summary}
+    assert_equal(3, res.size)
+    assert_equal("test", res[0])
+    assert_equal("test1", res[1])
+    assert_equal("test2", res[2])
+    res = []
+    @cache.update{|t| res << t.summary}
+    assert_equal(0, res.size)
   end
 
   
