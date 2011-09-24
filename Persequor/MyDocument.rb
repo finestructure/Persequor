@@ -12,6 +12,7 @@ require 'mytrac'
 
 class MyDocument < NSPersistentDocument
   attr_accessor :array_controller
+  attr_accessor :column_menu
   attr_accessor :predicate_editor
   attr_accessor :progress_bar
   attr_accessor :progress_label
@@ -38,6 +39,7 @@ class MyDocument < NSPersistentDocument
     super
     @predicate_editor.enclosingScrollView.setHasVerticalScroller(false)
     @previous_row_count = 2 # height that's configured in the nib
+    init_column_menu
     init_query
     init_cache_info
     init_ticket_cache
@@ -45,6 +47,19 @@ class MyDocument < NSPersistentDocument
 
 
   # helpers
+  
+  
+  def init_column_menu
+    @column_menu.removeAllItems
+    @table_view.tableColumns.each do |col|
+      item = NSMenuItem.alloc.initWithTitle(col.identifier,
+        action:'column_menu_item_selected:', keyEquivalent:"")
+      item.state = col.isHidden ? NSOffState : NSOnState
+      item.enabled = true
+      @column_menu.addItem(item)
+    end
+  end
+  
   
   def defaults(key)
     defaults = NSUserDefaults.standardUserDefaults
@@ -298,6 +313,20 @@ class MyDocument < NSPersistentDocument
     end
     @array_controller.setFilterPredicate(@predicate_editor.predicate)
     resize_window
+  end
+
+  
+  def column_menu_item_selected(menu_item)
+    col = @table_view.tableColumnWithIdentifier(menu_item.title)
+    return if col == nil
+    case menu_item.state
+    when NSOffState
+      col.setHidden(false)
+      menu_item.state = NSOnState
+    when NSOnState
+      col.setHidden(true)
+      menu_item.state = NSOffState
+    end
   end
 
 end
