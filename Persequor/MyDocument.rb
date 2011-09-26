@@ -91,14 +91,10 @@ class MyDocument < NSPersistentDocument
 
 
   def default_predicate
-    username = defaults("username")
-    if username != nil
-      predicate = NSPredicate.predicateWithFormat(
-      "(owner ==[cd] \"#{username}\") and (status != \"closed\")"
-      )
-    else
-      predicate = NSPredicate.predicateWithFormat('status != \"closed\"')
-    end
+    username = defaults("username") || ""
+    predicate = NSPredicate.predicateWithFormat(
+    "(owner ==[cd] \"#{username}\") and (status != \"closed\")"
+    )
     return predicate
   end
 
