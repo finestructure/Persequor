@@ -10,15 +10,6 @@ require 'trac4r/trac'
 require 'mytrac'
 
 
-class Account
-  attr_accessor :name, :url, :username, :password
-
-  def initialize
-    @name = "New Account"
-  end
-end
-
-
 class MyDocument < NSPersistentDocument
   attr_accessor :array_controller
   attr_accessor :column_menu
