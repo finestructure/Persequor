@@ -152,15 +152,20 @@ class MyDocument < NSPersistentDocument
     tickets = fetch_rows("Ticket")
     puts "tickets loaded: #{tickets.size}"
     
-    trac = Trac.new(defaults("tracUrl"),
-                    defaults("username"),
-                    defaults("password"))
     if @cache_info == nil
       updated_at = nil
     else
       updated_at = @cache_info.updated_at
     end
-    @ticket_cache = TicketCache.new(trac, tickets, updated_at)
+    
+    begin
+      trac = Trac.new(defaults("tracUrl"),
+                      defaults("username"),
+                      defaults("password"))
+      @ticket_cache = TicketCache.new(trac, tickets, updated_at)
+    rescue
+      puts "failed to initialize ticket cache"
+    end
   end
 
 
