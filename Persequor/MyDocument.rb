@@ -350,5 +350,11 @@ class MyDocument < NSPersistentDocument
     puts "account selected"
   end
   
+  
+  def edit_accounts(sender)
+    prefs_window = NSApplication.sharedApplication.delegate.prefs_window
+    prefs_window.makeKeyAndOrderFront(sender)
+  end
+  
 end
 
