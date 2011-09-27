@@ -380,9 +380,33 @@ class MyDocument < NSPersistentDocument
  
   def sheetDidEnd(sheet, returnCode: returnCode, contextInfo: contextInfo)
     puts "sheet ended: #{returnCode}"
-    p @accounts
+    index = @accounts.selectionIndex
+    if index == NSNotFound
+      puts "nothing selected"
+      return
+    else
+      puts "create new account"
+      moc = self.managedObjectContext
+      a = NSEntityDescription.insertNewObjectForEntityForName(
+        "Account",
+        inManagedObjectContext:moc
+      )
+      selected_account = @accounts.arrangedObjects[index]
+      p selected_account
+      a.desc = selected_account["desc"]
+      a.url = selected_account["url"]
+      a.username = selected_account["username"]
+    end
   end
   
+
+  def add_account(sender)
+    account = {
+      "desc" => "New Account"
+    }
+    @accounts.insertObject(account, atArrangedObjectIndex:0)
+    @accounts.setSelectionIndex(0)
+  end
 
 end
 
