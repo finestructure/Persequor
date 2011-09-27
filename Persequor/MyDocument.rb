@@ -11,6 +11,7 @@ require 'mytrac'
 
 
 class MyDocument < NSPersistentDocument
+  attr_accessor :accounts
   attr_accessor :account_popup
   attr_accessor :account_window
   attr_accessor :column_menu
