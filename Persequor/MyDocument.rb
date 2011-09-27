@@ -13,14 +13,14 @@ require 'mytrac'
 class MyDocument < NSPersistentDocument
   attr_accessor :account_popup
   attr_accessor :account_window
-  attr_accessor :array_controller
   attr_accessor :column_menu
   attr_accessor :predicate_editor
   attr_accessor :progress_bar
   attr_accessor :progress_label
-  attr_accessor :toolbar_view
   attr_accessor :refresh_button
   attr_accessor :table_view
+  attr_accessor :tickets
+  attr_accessor :toolbar_view
 
 
   def init
@@ -143,7 +143,7 @@ class MyDocument < NSPersistentDocument
     end
     
     @predicate_editor.setObjectValue(predicate)
-    @array_controller.setFilterPredicate(predicate)
+    @tickets.setFilterPredicate(predicate)
     resize_window
   end
 
@@ -322,7 +322,7 @@ class MyDocument < NSPersistentDocument
   def default_button_pressed(sender)
     predicate = default_predicate
     @predicate_editor.setObjectValue(predicate)
-    @array_controller.setFilterPredicate(predicate)
+    @tickets.setFilterPredicate(predicate)
     resize_window
   end
 
@@ -333,7 +333,7 @@ class MyDocument < NSPersistentDocument
       @predicate_editor.removeRowAtIndex(count-1)
       count -= 1
     end
-    @array_controller.setFilterPredicate(@predicate_editor.predicate)
+    @tickets.setFilterPredicate(@predicate_editor.predicate)
     resize_window
   end
 
@@ -379,6 +379,7 @@ class MyDocument < NSPersistentDocument
  
   def sheetDidEnd(sheet, returnCode: returnCode, contextInfo: contextInfo)
     puts "sheet ended: #{returnCode}"
+    p @accounts
   end
   
 
