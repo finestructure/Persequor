@@ -12,6 +12,7 @@ require 'mytrac'
 
 class MyDocument < NSPersistentDocument
   attr_accessor :account_popup
+  attr_accessor :account_window
   attr_accessor :array_controller
   attr_accessor :column_menu
   attr_accessor :predicate_editor
@@ -41,7 +42,6 @@ class MyDocument < NSPersistentDocument
     @predicate_editor.enclosingScrollView.setHasVerticalScroller(false)
     @previous_row_count = 2 # height that's configured in the nib
     init_column_menu
-    init_account
     init_query
     init_cache_info
     init_ticket_cache
@@ -60,19 +60,6 @@ class MyDocument < NSPersistentDocument
       item.enabled = true
       @column_menu.addItem(item)
     end
-  end
-  
-  
-  def init_account
-    accounts = defaults("accounts")
-    if accounts == nil or accounts.size == 0
-      puts "no account"
-    end
-  end
-  
-  
-  def sheetDidEnd(sheet, returnCode: returnCode, contextInfo: contextInfo)
-    puts "sheet ended"
   end
   
   
@@ -352,9 +339,29 @@ class MyDocument < NSPersistentDocument
   
   
   def edit_accounts(sender)
-    prefs_window = NSApplication.sharedApplication.delegate.prefs_window
-    prefs_window.makeKeyAndOrderFront(sender)
+    app = NSApplication.sharedApplication
+    #prefs_window.makeKeyAndOrderFront(sender)
+    app.beginSheet(
+      @account_window,
+      modalForWindow:self.windowForSheet,
+      modalDelegate:self,
+      didEndSelector:"sheetDidEnd:returnCode:contextInfo:",
+      contextInfo:nil
+    )
+  end
+
+ 
+  def dismiss_sheet(sender)
+    NSApplication.sharedApplication.endSheet(@account_window,
+      returnCode:sender.tag)
+    @account_window.close
+  end
+ 
+ 
+  def sheetDidEnd(sheet, returnCode: returnCode, contextInfo: contextInfo)
+    puts "sheet ended: #{returnCode}"
   end
   
+
 end
 
