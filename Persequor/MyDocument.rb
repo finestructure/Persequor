@@ -43,8 +43,27 @@ class MyDocument < NSPersistentDocument
     @previous_row_count = 2 # height that's configured in the nib
     init_column_menu
     init_query
-    init_cache_info
-    init_ticket_cache
+    
+    accounts = defaults("accounts")
+    if accounts == nil or accounts.size == 0
+      p self.windowForSheet
+      nc = NSNotificationCenter.defaultCenter
+      nc.addObserverForName(
+        NSWindowDidBecomeKeyNotification,
+        object: self.windowForSheet,
+        queue: nil,
+        usingBlock: ->(notification){
+          self.performSelector(
+            'edit_accounts:',
+            withObject: self,
+            afterDelay: 0.5
+          )
+        }
+      )
+    else
+      init_cache_info
+      init_ticket_cache
+    end
   end
 
 
