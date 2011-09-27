@@ -9,7 +9,6 @@
 
 class AppDelegate
   attr_accessor :accounts
-  attr_accessor :prefs_window
 
   def add_account(sender)
     account = {
