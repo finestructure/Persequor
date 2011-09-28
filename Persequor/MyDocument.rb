@@ -47,7 +47,7 @@ class MyDocument < NSPersistentDocument
     
     accounts = defaults("accounts")
     if accounts == nil or accounts.size == 0
-      p self.windowForSheet
+      add_account(self)
       nc = NSNotificationCenter.defaultCenter
       nc.addObserverForName(
         NSWindowDidBecomeKeyNotification,
