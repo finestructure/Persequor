@@ -8,17 +8,22 @@
 
 require 'trac4r/trac'
 require 'mytrac'
+require 'keychain/keychain'
 
 
 class MyDocument < NSPersistentDocument
-  attr_accessor :array_controller
+  attr_accessor :accounts
+  attr_accessor :account_popup
+  attr_accessor :account_window
   attr_accessor :column_menu
+  attr_accessor :password_field
   attr_accessor :predicate_editor
   attr_accessor :progress_bar
   attr_accessor :progress_label
-  attr_accessor :toolbar_view
   attr_accessor :refresh_button
   attr_accessor :table_view
+  attr_accessor :tickets
+  attr_accessor :toolbar_view
 
 
   def init
@@ -41,12 +46,65 @@ class MyDocument < NSPersistentDocument
     @previous_row_count = 2 # height that's configured in the nib
     init_column_menu
     init_query
-    init_cache_info
-    init_ticket_cache
+    
+    if core_data_account_set?
+      init_account_popup
+      init_cache_info
+      init_ticket_cache
+    else
+      begin_account_sheet
+    end
   end
 
 
   # helpers
+  
+  
+  def init_account_popup
+    cd_account = fetch_rows("Account")[0]
+    res = @accounts.arrangedObjects.find{|a| a["url"] == cd_account.url}
+    if res != nil
+      @accounts.setSelectedObjects([res])
+    else
+      account = {
+        "desc" => cd_account.desc,
+        "url" => cd_account.url,
+        "username" => cd_account.username
+      }
+      @accounts.insertObject(account, atArrangedObjectIndex:0)
+      @accounts.setSelectionIndex(0)
+    end
+  end
+  
+  
+  def core_data_account_set?
+    rows = fetch_rows("Account")
+    return (rows != nil and rows.size > 0)
+  end
+  
+  
+  def begin_account_sheet
+    # add a default if none are stored in the user defaults
+    user_defaults_accounts = defaults("accounts")
+    if user_defaults_accounts == nil or user_defaults_accounts.size == 0
+        add_account(self)
+    end
+    # need to open the sheet with a slight delay to make sure the
+    # parent window is up
+    nc = NSNotificationCenter.defaultCenter
+    nc.addObserverForName(
+      NSWindowDidBecomeKeyNotification,
+      object: self.windowForSheet,
+      queue: nil,
+      usingBlock: ->(notification){
+        self.performSelector(
+          'edit_accounts:',
+          withObject: self,
+          afterDelay: 0.5
+        )
+      }
+    )
+  end
   
   
   def init_column_menu
@@ -91,14 +149,10 @@ class MyDocument < NSPersistentDocument
 
 
   def default_predicate
-    username = defaults("username")
-    if username != nil
-      predicate = NSPredicate.predicateWithFormat(
-      "(owner ==[cd] \"#{username}\") and (status != \"closed\")"
-      )
-    else
-      predicate = NSPredicate.predicateWithFormat('status != \"closed\"')
-    end
+    username = defaults("username") || ""
+    predicate = NSPredicate.predicateWithFormat(
+    "(owner ==[cd] \"#{username}\") and (status != \"closed\")"
+    )
     return predicate
   end
 
@@ -114,6 +168,19 @@ class MyDocument < NSPersistentDocument
   end
   
   
+  def delete_rows(entity_name)
+    request = NSFetchRequest.fetchRequestWithEntityName(entity_name)
+    raise "no request" unless request
+    request.setIncludesPropertyValues(false)
+    moc = self.managedObjectContext
+    raise "no moc" unless moc
+    error = Pointer.new_with_type("@")
+    moc.executeFetchRequest(request, error:error).each do |obj|
+      moc.deleteObject(obj)
+    end
+  end
+  
+  
   def init_query
     rows = fetch_rows("Query")
     
@@ -126,7 +193,7 @@ class MyDocument < NSPersistentDocument
     end
     
     @predicate_editor.setObjectValue(predicate)
-    @array_controller.setFilterPredicate(predicate)
+    @tickets.setFilterPredicate(predicate)
     resize_window
   end
 
@@ -143,15 +210,21 @@ class MyDocument < NSPersistentDocument
     tickets = fetch_rows("Ticket")
     puts "tickets loaded: #{tickets.size}"
     
-    trac = Trac.new(defaults("tracUrl"),
-                    defaults("username"),
-                    defaults("password"))
     if @cache_info == nil
       updated_at = nil
     else
       updated_at = @cache_info.updated_at
     end
-    @ticket_cache = TicketCache.new(trac, tickets, updated_at)
+    
+    begin
+      keychain_item = keychain_item_for_account(selected_account)
+      trac = Trac.new(selected_account["url"],
+                      selected_account["username"],
+                      keychain_item.password)
+      @ticket_cache = TicketCache.new(trac, tickets, updated_at)
+    rescue
+      puts "failed to initialize ticket cache"
+    end
   end
 
 
@@ -300,7 +373,7 @@ class MyDocument < NSPersistentDocument
   def default_button_pressed(sender)
     predicate = default_predicate
     @predicate_editor.setObjectValue(predicate)
-    @array_controller.setFilterPredicate(predicate)
+    @tickets.setFilterPredicate(predicate)
     resize_window
   end
 
@@ -311,7 +384,7 @@ class MyDocument < NSPersistentDocument
       @predicate_editor.removeRowAtIndex(count-1)
       count -= 1
     end
-    @array_controller.setFilterPredicate(@predicate_editor.predicate)
+    @tickets.setFilterPredicate(@predicate_editor.predicate)
     resize_window
   end
 
@@ -328,6 +401,154 @@ class MyDocument < NSPersistentDocument
       menu_item.state = NSOffState
     end
   end
+  
+  
+  def account_selected(sender)
+    puts "account selected in popup"
+    update_account
+  end
+  
+  
+  def keychain_item_for_account(account)
+    if account != nil
+      service = service_for_url(account["url"])
+      username = account["username"]
+      item = MRKeychain::GenericItem.item_for_service(
+        service, username: username
+      )
+      return item
+    else
+      return nil
+    end
+  end
+  
+  
+  def service_for_url(url)
+    return "Trac: #{url}"
+  end
+  
+  
+  def selected_account
+    index = @accounts.selectionIndex
+    return @accounts.arrangedObjects[index]
+  end
+  
+  
+  def update_password_field
+    keychain_item = keychain_item_for_account(selected_account)
+    if keychain_item != nil
+      @password_field.setStringValue(keychain_item.password)
+    end
+  end
+  
+  
+  def edit_accounts(sender)
+    app = NSApplication.sharedApplication
+    app.beginSheet(
+      @account_window,
+      modalForWindow:self.windowForSheet,
+      modalDelegate:self,
+      didEndSelector:"sheetDidEnd:returnCode:contextInfo:",
+      contextInfo:nil
+    )
+    update_password_field
+  end
+
+ 
+  def dismiss_sheet(sender)
+    NSApplication.sharedApplication.endSheet(@account_window,
+      returnCode:sender.tag)
+    @account_window.close
+  end
+ 
+ 
+  def save_password
+    service = service_for_url(selected_account["url"])
+    username = selected_account["username"]
+    password = @password_field.stringValue
+    
+    if service == nil or username == nil
+      return
+    end
+    
+    keychain_item = keychain_item_for_account(selected_account)
+    if keychain_item != nil
+      keychain_item.password = password
+    else
+      MRKeychain::GenericItem.add_item_for_service(
+        service,
+        username: username,
+        password: password
+      )
+    end
+    
+    puts "saved service \"#{service}\" in keychain"
+  end
+ 
+  
+  def update_account
+    index = @accounts.selectionIndex
+    if index == NSNotFound
+      puts "nothing selected"
+      return
+    end
+
+    if not core_data_account_set?
+      puts "create new account"
+      moc = self.managedObjectContext
+      account = NSEntityDescription.insertNewObjectForEntityForName(
+        "Account",
+        inManagedObjectContext:moc
+      )
+    else
+      account = fetch_rows("Account")[0]
+    end
+    
+    # save selected account data to core data
+    account.desc = selected_account["desc"]
+    account.url = selected_account["url"]
+    account.username = selected_account["username"]    
+    
+    # invalidate cache
+    puts "invalidating cache"
+    delete_rows("Ticket")
+    delete_rows("CacheInfo")
+    init_cache_info
+    init_ticket_cache
+  end
+ 
+ 
+  def sheetDidEnd(sheet, returnCode: returnCode, contextInfo: contextInfo)
+    puts "sheet ended: #{returnCode}"
+    update_account
+    save_password
+  end
+  
+
+  def add_account(sender)
+    account = {
+      "desc" => "New Account"
+    }
+    @accounts.insertObject(account, atArrangedObjectIndex:0)
+    @accounts.setSelectionIndex(0)
+  end
+
+
+  # password text field delegate
+
+  def control(control, textShouldEndEditing: editor)
+    save_password
+    return true
+  end
+
+
+  # table view delegate
+
+  def tableViewSelectionDidChange(aNotification)
+    puts "updating password field"
+    update_password_field
+  end
+
 
 end
 
