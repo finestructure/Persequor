@@ -8,6 +8,7 @@
 
 require 'trac4r/trac'
 require 'mytrac'
+require 'keychain/keychain'
 
 
 class MyDocument < NSPersistentDocument
@@ -407,6 +408,40 @@ class MyDocument < NSPersistentDocument
     @accounts.insertObject(account, atArrangedObjectIndex:0)
     @accounts.setSelectionIndex(0)
   end
+
+
+  # password text field delegate
+
+  def control(control, textShouldEndEditing: editor)
+    index = @accounts.selectionIndex
+    selected_account = @accounts.arrangedObjects[index]
+    
+    service = "Trac: #{selected_account["url"]}"
+    username = selected_account["url"]
+    password = editor.string
+    
+    item = MRKeychain::GenericItem.item_for_service(
+      service, username: username
+    )
+    if item != nil
+      item.password = password
+    else
+      MRKeychain::GenericItem.add_item_for_service(
+        service,
+        username: username,
+        password: password
+      )
+    end
+    
+    puts "saved service \"#{service}\" in keychain"
+    return true
+  end
+
+
+  # account sheet delegate
+
+  
+
 
 end
 
