@@ -18,6 +18,7 @@
 		5A57A4F61425F1A7000F496A /* MyDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5A57A4F41425F1A7000F496A /* MyDocument.xib */; };
 		5A57A4F91425F1A7000F496A /* MyDocument.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5A57A4F71425F1A7000F496A /* MyDocument.xcdatamodeld */; };
 		5A57A50514262BF8000F496A /* trac4r in Resources */ = {isa = PBXBuildFile; fileRef = 5A57A50414262BF8000F496A /* trac4r */; };
+		5A621CB914336EC60077FA6E /* keychain in Resources */ = {isa = PBXBuildFile; fileRef = 5A621CB814336EC60077FA6E /* keychain */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +46,7 @@
 		5A57A4F51425F1A7000F496A /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MyDocument.xib; sourceTree = "<group>"; };
 		5A57A4F81425F1A7000F496A /* MyDocument.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MyDocument.xcdatamodel; sourceTree = "<group>"; };
 		5A57A50414262BF8000F496A /* trac4r */ = {isa = PBXFileReference; lastKnownFileType = folder; path = trac4r; sourceTree = "<group>"; };
+		5A621CB814336EC60077FA6E /* keychain */ = {isa = PBXFileReference; lastKnownFileType = folder; path = keychain; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,6 +93,7 @@
 			children = (
 				5A0CB135142A45C10015FEE9 /* mytrac.rb */,
 				5A57A50414262BF8000F496A /* trac4r */,
+				5A621CB814336EC60077FA6E /* keychain */,
 				5A57A4EC1425F1A7000F496A /* MainMenu.xib */,
 				5A57A4F21425F1A7000F496A /* MyDocument.rb */,
 				5A57A4F41425F1A7000F496A /* MyDocument.xib */,
@@ -196,6 +199,7 @@
 				5A57A4F61425F1A7000F496A /* MyDocument.xib in Resources */,
 				5A57A50514262BF8000F496A /* trac4r in Resources */,
 				5A0CB136142A45C10015FEE9 /* mytrac.rb in Resources */,
+				5A621CB914336EC60077FA6E /* keychain in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
