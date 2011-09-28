@@ -150,6 +150,19 @@ class MyDocument < NSPersistentDocument
   end
   
   
+  def delete_rows(entity_name)
+    request = NSFetchRequest.fetchRequestWithEntityName(entity_name)
+    raise "no request" unless request
+    request.setIncludesPropertyValues(false)
+    moc = self.managedObjectContext
+    raise "no moc" unless moc
+    error = Pointer.new_with_type("@")
+    moc.executeFetchRequest(request, error:error).each do |obj|
+      moc.deleteObject(obj)
+    end
+  end
+  
+  
   def init_query
     rows = fetch_rows("Query")
     
@@ -186,9 +199,10 @@ class MyDocument < NSPersistentDocument
     end
     
     begin
-      trac = Trac.new(defaults("tracUrl"),
-                      defaults("username"),
-                      defaults("password"))
+      keychain_item = keychain_item_for_account(selected_account)
+      trac = Trac.new(selected_account["url"],
+                      selected_account["username"],
+                      keychain_item.password)
       @ticket_cache = TicketCache.new(trac, tickets, updated_at)
     rescue
       puts "failed to initialize ticket cache"
@@ -372,7 +386,8 @@ class MyDocument < NSPersistentDocument
   
   
   def account_selected(sender)
-    puts "account selected"
+    puts "account selected in popup"
+    update_account
   end
   
   
@@ -391,9 +406,13 @@ class MyDocument < NSPersistentDocument
   end
   
   
-  def update_password_field
+  def selected_account
     index = @accounts.selectionIndex
-    selected_account = @accounts.arrangedObjects[index]
+    return @accounts.arrangedObjects[index]
+  end
+  
+  
+  def update_password_field
     keychain_item = keychain_item_for_account(selected_account)
     if keychain_item != nil
       @password_field.setStringValue(keychain_item.password)
@@ -422,9 +441,6 @@ class MyDocument < NSPersistentDocument
  
  
   def save_password
-    index = @accounts.selectionIndex
-    selected_account = @accounts.arrangedObjects[index]
-    
     service = service_for_url(selected_account["url"])
     username = selected_account["username"]
     password = @password_field.stringValue
@@ -447,15 +463,14 @@ class MyDocument < NSPersistentDocument
     puts "saved service \"#{service}\" in keychain"
   end
  
- 
-  def sheetDidEnd(sheet, returnCode: returnCode, contextInfo: contextInfo)
-    puts "sheet ended: #{returnCode}"
+  
+  def update_account
     index = @accounts.selectionIndex
     if index == NSNotFound
       puts "nothing selected"
       return
     end
-    
+
     if not core_data_account_set?
       puts "create new account"
       moc = self.managedObjectContext
@@ -467,11 +482,23 @@ class MyDocument < NSPersistentDocument
       account = fetch_rows("Account")[0]
     end
     
-    # save selected account data to core data and keychain
-    selected_account = @accounts.arrangedObjects[index]
+    # save selected account data to core data
     account.desc = selected_account["desc"]
     account.url = selected_account["url"]
     account.username = selected_account["username"]    
+    
+    # invalidate cache
+    puts "invalidating cache"
+    delete_rows("Ticket")
+    delete_rows("CacheInfo")
+    init_cache_info
+    init_ticket_cache
+  end
+ 
+ 
+  def sheetDidEnd(sheet, returnCode: returnCode, contextInfo: contextInfo)
+    puts "sheet ended: #{returnCode}"
+    update_account
     save_password
   end
   
@@ -499,7 +526,6 @@ class MyDocument < NSPersistentDocument
     puts "updating password field"
     update_password_field
   end
-
 
 
 end
