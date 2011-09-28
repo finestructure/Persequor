@@ -47,30 +47,46 @@ class MyDocument < NSPersistentDocument
     init_column_menu
     init_query
     
-    accounts = defaults("accounts")
-    if accounts == nil or accounts.size == 0
-      add_account(self)
-      nc = NSNotificationCenter.defaultCenter
-      nc.addObserverForName(
-        NSWindowDidBecomeKeyNotification,
-        object: self.windowForSheet,
-        queue: nil,
-        usingBlock: ->(notification){
-          self.performSelector(
-            'edit_accounts:',
-            withObject: self,
-            afterDelay: 0.5
-          )
-        }
-      )
-    else
+    if core_data_account_set?
       init_cache_info
       init_ticket_cache
+    else
+      begin_account_sheet
     end
   end
 
 
   # helpers
+  
+  
+  def core_data_account_set?
+    rows = fetch_rows("Account")
+    return (rows != nil and rows.size > 0)
+  end
+  
+  
+  def begin_account_sheet
+    # add a default if none are stored in the user defaults
+    user_defaults_accounts = defaults("accounts")
+    if user_defaults_accounts == nil or user_defaults_accounts.size == 0
+        add_account(self)
+    end
+    # need to open the sheet with a slight delay to make sure the
+    # parent window is up
+    nc = NSNotificationCenter.defaultCenter
+    nc.addObserverForName(
+      NSWindowDidBecomeKeyNotification,
+      object: self.windowForSheet,
+      queue: nil,
+      usingBlock: ->(notification){
+        self.performSelector(
+          'edit_accounts:',
+          withObject: self,
+          afterDelay: 0.5
+        )
+      }
+    )
+  end
   
   
   def init_column_menu
@@ -438,20 +454,25 @@ class MyDocument < NSPersistentDocument
     if index == NSNotFound
       puts "nothing selected"
       return
-    else
+    end
+    
+    if not core_data_account_set?
       puts "create new account"
       moc = self.managedObjectContext
-      a = NSEntityDescription.insertNewObjectForEntityForName(
+      account = NSEntityDescription.insertNewObjectForEntityForName(
         "Account",
         inManagedObjectContext:moc
       )
-      selected_account = @accounts.arrangedObjects[index]
-      a.desc = selected_account["desc"]
-      a.url = selected_account["url"]
-      a.username = selected_account["username"]
-      
-      save_password
+    else
+      account = fetch_rows("Account")[0]
     end
+    
+    # save selected account data to core data and keychain
+    selected_account = @accounts.arrangedObjects[index]
+    account.desc = selected_account["desc"]
+    account.url = selected_account["url"]
+    account.username = selected_account["username"]    
+    save_password
   end
   
 
