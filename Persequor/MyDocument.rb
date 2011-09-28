@@ -360,9 +360,33 @@ class MyDocument < NSPersistentDocument
   end
   
   
+  def keychain_item_for_account(account)
+    service = service_for_url(account["url"])
+    username = account["username"]
+    item = MRKeychain::GenericItem.item_for_service(
+      service, username: username
+    )
+    return item
+  end
+  
+  
+  def service_for_url(url)
+    return "Trac: #{url}"
+  end
+  
+  
+  def update_password_field
+    index = @accounts.selectionIndex
+    selected_account = @accounts.arrangedObjects[index]
+    keychain_item = keychain_item_for_account(selected_account)
+    if keychain_item != nil
+      @password_field.setStringValue(keychain_item.password)
+    end
+  end
+  
+  
   def edit_accounts(sender)
     app = NSApplication.sharedApplication
-    #prefs_window.makeKeyAndOrderFront(sender)
     app.beginSheet(
       @account_window,
       modalForWindow:self.windowForSheet,
@@ -370,6 +394,7 @@ class MyDocument < NSPersistentDocument
       didEndSelector:"sheetDidEnd:returnCode:contextInfo:",
       contextInfo:nil
     )
+    update_password_field
   end
 
  
@@ -384,19 +409,17 @@ class MyDocument < NSPersistentDocument
     index = @accounts.selectionIndex
     selected_account = @accounts.arrangedObjects[index]
     
-    service = "Trac: #{selected_account["url"]}"
-    username = selected_account["url"]
+    service = service_for_url(selected_account["url"])
+    username = selected_account["username"]
     password = @password_field.stringValue
     
     if service == nil or username == nil
       return
     end
     
-    item = MRKeychain::GenericItem.item_for_service(
-      service, username: username
-    )
-    if item != nil
-      item.password = password
+    keychain_item = keychain_item_for_account(selected_account)
+    if keychain_item != nil
+      keychain_item.password = password
     else
       MRKeychain::GenericItem.add_item_for_service(
         service,
@@ -449,9 +472,13 @@ class MyDocument < NSPersistentDocument
   end
 
 
-  # account sheet delegate
+  # table view delegate
 
-  
+  def tableViewSelectionDidChange(aNotification)
+    puts "updating password field"
+    update_password_field
+  end
+
 
 
 end
