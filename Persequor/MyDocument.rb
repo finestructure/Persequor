@@ -16,6 +16,7 @@ class MyDocument < NSPersistentDocument
   attr_accessor :account_popup
   attr_accessor :account_window
   attr_accessor :column_menu
+  attr_accessor :password_field
   attr_accessor :predicate_editor
   attr_accessor :progress_bar
   attr_accessor :progress_label
@@ -379,6 +380,35 @@ class MyDocument < NSPersistentDocument
   end
  
  
+  def save_password
+    index = @accounts.selectionIndex
+    selected_account = @accounts.arrangedObjects[index]
+    
+    service = "Trac: #{selected_account["url"]}"
+    username = selected_account["url"]
+    password = @password_field.stringValue
+    
+    if service == nil or username == nil
+      return
+    end
+    
+    item = MRKeychain::GenericItem.item_for_service(
+      service, username: username
+    )
+    if item != nil
+      item.password = password
+    else
+      MRKeychain::GenericItem.add_item_for_service(
+        service,
+        username: username,
+        password: password
+      )
+    end
+    
+    puts "saved service \"#{service}\" in keychain"
+  end
+ 
+ 
   def sheetDidEnd(sheet, returnCode: returnCode, contextInfo: contextInfo)
     puts "sheet ended: #{returnCode}"
     index = @accounts.selectionIndex
@@ -393,10 +423,11 @@ class MyDocument < NSPersistentDocument
         inManagedObjectContext:moc
       )
       selected_account = @accounts.arrangedObjects[index]
-      p selected_account
       a.desc = selected_account["desc"]
       a.url = selected_account["url"]
       a.username = selected_account["username"]
+      
+      save_password
     end
   end
   
@@ -413,27 +444,7 @@ class MyDocument < NSPersistentDocument
   # password text field delegate
 
   def control(control, textShouldEndEditing: editor)
-    index = @accounts.selectionIndex
-    selected_account = @accounts.arrangedObjects[index]
-    
-    service = "Trac: #{selected_account["url"]}"
-    username = selected_account["url"]
-    password = editor.string
-    
-    item = MRKeychain::GenericItem.item_for_service(
-      service, username: username
-    )
-    if item != nil
-      item.password = password
-    else
-      MRKeychain::GenericItem.add_item_for_service(
-        service,
-        username: username,
-        password: password
-      )
-    end
-    
-    puts "saved service \"#{service}\" in keychain"
+    save_password
     return true
   end
 
