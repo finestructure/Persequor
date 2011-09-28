@@ -48,6 +48,7 @@ class MyDocument < NSPersistentDocument
     init_query
     
     if core_data_account_set?
+      init_account_popup
       init_cache_info
       init_ticket_cache
     else
@@ -57,6 +58,23 @@ class MyDocument < NSPersistentDocument
 
 
   # helpers
+  
+  
+  def init_account_popup
+    cd_account = fetch_rows("Account")[0]
+    res = @accounts.arrangedObjects.find{|a| a["url"] == cd_account.url}
+    if res != nil
+      @accounts.setSelectedObjects([res])
+    else
+      account = {
+        "desc" => cd_account.desc,
+        "url" => cd_account.url,
+        "username" => cd_account.username
+      }
+      @accounts.insertObject(account, atArrangedObjectIndex:0)
+      @accounts.setSelectionIndex(0)
+    end
+  end
   
   
   def core_data_account_set?
@@ -392,12 +410,16 @@ class MyDocument < NSPersistentDocument
   
   
   def keychain_item_for_account(account)
-    service = service_for_url(account["url"])
-    username = account["username"]
-    item = MRKeychain::GenericItem.item_for_service(
-      service, username: username
-    )
-    return item
+    if account != nil
+      service = service_for_url(account["url"])
+      username = account["username"]
+      item = MRKeychain::GenericItem.item_for_service(
+        service, username: username
+      )
+      return item
+    else
+      return nil
+    end
   end
   
   
