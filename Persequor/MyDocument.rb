@@ -51,7 +51,7 @@ class MyDocument < NSPersistentDocument
     init_query
     
     if core_data_account_set?
-      init_account_popup
+      init_accounts
       init_cache_info
       init_ticket_cache
     else
@@ -63,9 +63,19 @@ class MyDocument < NSPersistentDocument
   # helpers
   
   
-  def init_account_popup
+  def init_accounts
     cd_account = fetch_rows("Account")[0]
-    res = @accounts.arrangedObjects.find{|a| a["url"] == cd_account.url}
+    # first match both desc and url
+    res = @accounts.arrangedObjects.find do |a|
+      a["desc"] == cd_account.desc and a["url"] == cd_account.url
+    end
+    if res == nil
+      # now try just the url
+      res = @accounts.arrangedObjects.find do |a|
+        a["url"] == cd_account.url
+      end
+    end
+    
     if res != nil
       @accounts.setSelectedObjects([res])
     else
