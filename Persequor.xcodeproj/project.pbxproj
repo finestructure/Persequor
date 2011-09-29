@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5A0CB136142A45C10015FEE9 /* mytrac.rb in Resources */ = {isa = PBXBuildFile; fileRef = 5A0CB135142A45C10015FEE9 /* mytrac.rb */; };
+		5A348D2C1434A0780072EC4B /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A348D2B1434A0780072EC4B /* icon.png */; };
 		5A57A4DD1425F1A7000F496A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A57A4DC1425F1A7000F496A /* Cocoa.framework */; };
 		5A57A4DF1425F1A7000F496A /* MacRuby.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A57A4DE1425F1A7000F496A /* MacRuby.framework */; };
 		5A57A4E81425F1A7000F496A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5A57A4E61425F1A7000F496A /* InfoPlist.strings */; };
@@ -33,6 +34,7 @@
 
 /* Begin PBXFileReference section */
 		5A0CB135142A45C10015FEE9 /* mytrac.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = mytrac.rb; sourceTree = "<group>"; };
+		5A348D2B1434A0780072EC4B /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		5A57A4D81425F1A7000F496A /* Persequor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Persequor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A57A4DC1425F1A7000F496A /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		5A57A4DE1425F1A7000F496A /* MacRuby.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MacRuby.framework; path = Library/Frameworks/MacRuby.framework; sourceTree = DEVELOPER_DIR; };
@@ -65,6 +67,7 @@
 		5A57A4CD1425F1A7000F496A = {
 			isa = PBXGroup;
 			children = (
+				5A348D2B1434A0780072EC4B /* icon.png */,
 				5A57A4E31425F1A7000F496A /* Persequor */,
 				5A57A4DB1425F1A7000F496A /* Frameworks */,
 				5A57A4D91425F1A7000F496A /* Products */,
@@ -200,6 +203,7 @@
 				5A57A50514262BF8000F496A /* trac4r in Resources */,
 				5A0CB136142A45C10015FEE9 /* mytrac.rb in Resources */,
 				5A621CB914336EC60077FA6E /* keychain in Resources */,
+				5A348D2C1434A0780072EC4B /* icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
