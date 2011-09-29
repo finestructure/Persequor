@@ -44,6 +44,9 @@ class MyDocument < NSPersistentDocument
     super
     @predicate_editor.enclosingScrollView.setHasVerticalScroller(false)
     @previous_row_count = 2 # height that's configured in the nib
+
+    @accounts.addObserver(self, forKeyPath:'selection', options:0, context:nil)
+
     init_column_menu
     init_query
     
@@ -438,6 +441,8 @@ class MyDocument < NSPersistentDocument
     keychain_item = keychain_item_for_account(selected_account)
     if keychain_item != nil
       @password_field.setStringValue(keychain_item.password)
+    else
+      @password_field.setStringValue('')
     end
   end
   
@@ -542,13 +547,14 @@ class MyDocument < NSPersistentDocument
   end
 
 
-  # table view delegate
+  # KVO for accounts controller
 
-  def tableViewSelectionDidChange(aNotification)
-    puts "updating password field"
-    update_password_field
+  def observeValueForKeyPath(keypath, ofObject: object, change: change,
+    context: context)
+    if keypath == "selection"
+      update_password_field
+    end
   end
-
 
 end
 
