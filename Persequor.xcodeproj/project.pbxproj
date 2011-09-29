@@ -19,7 +19,7 @@
 		5A57A4F91425F1A7000F496A /* MyDocument.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5A57A4F71425F1A7000F496A /* MyDocument.xcdatamodeld */; };
 		5A57A50514262BF8000F496A /* trac4r in Resources */ = {isa = PBXBuildFile; fileRef = 5A57A50414262BF8000F496A /* trac4r */; };
 		5A621CB914336EC60077FA6E /* keychain in Resources */ = {isa = PBXBuildFile; fileRef = 5A621CB814336EC60077FA6E /* keychain */; };
-		5AA074001434A2E40047684D /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AA073FF1434A2E40047684D /* icon.png */; };
+		5AEC2AA31434A5E70022D4BD /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 5AEC2AA21434A5E70022D4BD /* icon.icns */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,7 +48,7 @@
 		5A57A4F81425F1A7000F496A /* MyDocument.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MyDocument.xcdatamodel; sourceTree = "<group>"; };
 		5A57A50414262BF8000F496A /* trac4r */ = {isa = PBXFileReference; lastKnownFileType = folder; path = trac4r; sourceTree = "<group>"; };
 		5A621CB814336EC60077FA6E /* keychain */ = {isa = PBXFileReference; lastKnownFileType = folder; path = keychain; sourceTree = "<group>"; };
-		5AA073FF1434A2E40047684D /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = Resources/icon.png; sourceTree = "<group>"; };
+		5AEC2AA21434A5E70022D4BD /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = icon.icns; path = Resources/icon.icns; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,7 +129,7 @@
 		5AA073FE1434A2CF0047684D /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				5AA073FF1434A2E40047684D /* icon.png */,
+				5AEC2AA21434A5E70022D4BD /* icon.icns */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -211,7 +211,7 @@
 				5A57A50514262BF8000F496A /* trac4r in Resources */,
 				5A0CB136142A45C10015FEE9 /* mytrac.rb in Resources */,
 				5A621CB914336EC60077FA6E /* keychain in Resources */,
-				5AA074001434A2E40047684D /* icon.png in Resources */,
+				5AEC2AA31434A5E70022D4BD /* icon.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
