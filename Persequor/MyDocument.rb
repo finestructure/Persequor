@@ -17,6 +17,7 @@ class MyDocument < NSPersistentDocument
   attr_accessor :column_menu
   attr_accessor :password_field
   attr_accessor :predicate_editor
+  attr_accessor :previous_account
   attr_accessor :progress_bar
   attr_accessor :progress_label
   attr_accessor :refresh_button
@@ -451,6 +452,7 @@ class MyDocument < NSPersistentDocument
   
   
   def edit_accounts(sender)
+    @previous_account = selected_account
     app = NSApplication.sharedApplication
     app.beginSheet(
       @account_window,
@@ -528,8 +530,10 @@ class MyDocument < NSPersistentDocument
  
   def sheetDidEnd(sheet, returnCode: returnCode, contextInfo: contextInfo)
     puts "sheet ended: #{returnCode}"
-    update_account
-    save_password
+    if @previous_account != selected_account
+      update_account
+      save_password
+    end
   end
   
 
@@ -554,10 +558,13 @@ class MyDocument < NSPersistentDocument
 
   def observeValueForKeyPath(keypath, ofObject: object, change: change,
     context: context)
-    puts "KVO: #{keypath} #{change} #{context}"
     if keypath == "selection"
-      update_account
       update_password_field
+      if not @account_window.isVisible
+        # only do update_account when change is triggered by popup
+        # when sheet is up, it's happening in sheetDidEnd
+        update_account
+      end
     end
   end
 
