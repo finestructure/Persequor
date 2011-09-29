@@ -13,7 +13,6 @@ require 'keychain/keychain'
 
 class MyDocument < NSPersistentDocument
   attr_accessor :accounts
-  attr_accessor :account_popup
   attr_accessor :account_window
   attr_accessor :column_menu
   attr_accessor :password_field
@@ -416,12 +415,6 @@ class MyDocument < NSPersistentDocument
   end
   
   
-  def account_selected(sender)
-    puts "account selected in popup"
-    update_account
-  end
-  
-  
   def keychain_item_for_account(account)
     if account != nil
       service = service_for_url(account["url"])
@@ -561,7 +554,9 @@ class MyDocument < NSPersistentDocument
 
   def observeValueForKeyPath(keypath, ofObject: object, change: change,
     context: context)
+    puts "KVO: #{keypath} #{change} #{context}"
     if keypath == "selection"
+      update_account
       update_password_field
     end
   end
