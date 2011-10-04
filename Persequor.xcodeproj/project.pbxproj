@@ -20,6 +20,9 @@
 		5A57A50514262BF8000F496A /* trac4r in Resources */ = {isa = PBXBuildFile; fileRef = 5A57A50414262BF8000F496A /* trac4r */; };
 		5A621CB914336EC60077FA6E /* keychain in Resources */ = {isa = PBXBuildFile; fileRef = 5A621CB814336EC60077FA6E /* keychain */; };
 		5AEC2AA31434A5E70022D4BD /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 5AEC2AA21434A5E70022D4BD /* icon.icns */; };
+		5AEC2AEF143B5E550022D4BD /* TicketWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5AEC2AEE143B5E550022D4BD /* TicketWindow.xib */; };
+		5AEC2AF2143B61600022D4BD /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AEC2AF1143B61600022D4BD /* WebKit.framework */; };
+		5AEC2AF4143B619C0022D4BD /* TicketWindowController.rb in Resources */ = {isa = PBXBuildFile; fileRef = 5AEC2AF3143B619C0022D4BD /* TicketWindowController.rb */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +52,9 @@
 		5A57A50414262BF8000F496A /* trac4r */ = {isa = PBXFileReference; lastKnownFileType = folder; path = trac4r; sourceTree = "<group>"; };
 		5A621CB814336EC60077FA6E /* keychain */ = {isa = PBXFileReference; lastKnownFileType = folder; path = keychain; sourceTree = "<group>"; };
 		5AEC2AA21434A5E70022D4BD /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = icon.icns; path = Resources/icon.icns; sourceTree = "<group>"; };
+		5AEC2AEE143B5E550022D4BD /* TicketWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TicketWindow.xib; sourceTree = "<group>"; };
+		5AEC2AF1143B61600022D4BD /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		5AEC2AF3143B619C0022D4BD /* TicketWindowController.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = TicketWindowController.rb; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +62,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5AEC2AF2143B61600022D4BD /* WebKit.framework in Frameworks */,
 				5A57A4DD1425F1A7000F496A /* Cocoa.framework in Frameworks */,
 				5A57A4DF1425F1A7000F496A /* MacRuby.framework in Frameworks */,
 			);
@@ -67,6 +74,7 @@
 		5A57A4CD1425F1A7000F496A = {
 			isa = PBXGroup;
 			children = (
+				5AEC2AF1143B61600022D4BD /* WebKit.framework */,
 				5A57A4E31425F1A7000F496A /* Persequor */,
 				5A57A4DB1425F1A7000F496A /* Frameworks */,
 				5A57A4D91425F1A7000F496A /* Products */,
@@ -99,10 +107,12 @@
 				5A57A4EC1425F1A7000F496A /* MainMenu.xib */,
 				5A57A4F21425F1A7000F496A /* MyDocument.rb */,
 				5A57A4F41425F1A7000F496A /* MyDocument.xib */,
+				5AEC2AEE143B5E550022D4BD /* TicketWindow.xib */,
 				5A57A4F71425F1A7000F496A /* MyDocument.xcdatamodeld */,
 				5A57A4EF1425F1A7000F496A /* Other Sources */,
 				5A57A4E41425F1A7000F496A /* Supporting Files */,
 				5AA073FE1434A2CF0047684D /* Resources */,
+				5AEC2AF3143B619C0022D4BD /* TicketWindowController.rb */,
 			);
 			path = Persequor;
 			sourceTree = "<group>";
@@ -212,6 +222,8 @@
 				5A0CB136142A45C10015FEE9 /* mytrac.rb in Resources */,
 				5A621CB914336EC60077FA6E /* keychain in Resources */,
 				5AEC2AA31434A5E70022D4BD /* icon.icns in Resources */,
+				5AEC2AEF143B5E550022D4BD /* TicketWindow.xib in Resources */,
+				5AEC2AF4143B619C0022D4BD /* TicketWindowController.rb in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

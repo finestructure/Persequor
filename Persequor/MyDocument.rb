@@ -576,6 +576,22 @@ class MyDocument < NSPersistentDocument
   
   def rowAction
     puts "clicked: #{@table_view.clickedRow}"
+    row_index = @table_view.clickedRow
+    
+    return if row_index == -1
+    
+    ticket = @tickets.arrangedObjects[row_index]
+    puts "ticket: #{ticket.id}"
+    
+    vc = TicketWindowController.alloc.initWithWindowNibName("TicketWindow")
+    vc.showWindow(self)
+    #vc.window.makeKeyAndOrderFront
+    puts "window: #{vc.window}"
+    
+    url = "#{selected_account["url"]}/ticket/#{ticket.id}"
+    url = NSURL.URLWithString(url)
+    request = NSURLRequest.requestWithURL(url)
+    vc.web_view.mainFrame.loadRequest(request)
   end
 
 end
