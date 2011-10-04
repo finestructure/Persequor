@@ -49,7 +49,7 @@
 			<object class="NSWindowTemplate" id="1005">
 				<int key="NSWindowStyleMask">15</int>
 				<int key="NSWindowBacking">2</int>
-				<string key="NSWindowRect">{{196, 240}, {480, 270}}</string>
+				<string key="NSWindowRect">{{196, 240}, {800, 600}}</string>
 				<int key="NSWTFlags">544735232</int>
 				<string key="NSWindowTitle">Ticket</string>
 				<string key="NSWindowClass">NSWindow</string>
@@ -60,7 +60,7 @@
 					<int key="NSvFlags">256</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
-						<object class="WebView" id="859114042">
+						<object class="WebView" id="174885830">
 							<reference key="NSNextResponder" ref="1006"/>
 							<int key="NSvFlags">274</int>
 							<object class="NSMutableSet" key="NSDragTypes">
@@ -84,7 +84,7 @@
 									<string>public.url-name</string>
 								</object>
 							</object>
-							<string key="NSFrameSize">{480, 270}</string>
+							<string key="NSFrameSize">{800, 600}</string>
 							<reference key="NSSuperview" ref="1006"/>
 							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView"/>
@@ -106,13 +106,14 @@
 							<bool key="AllowsUndo">YES</bool>
 						</object>
 					</object>
-					<string key="NSFrameSize">{480, 270}</string>
+					<string key="NSFrameSize">{800, 600}</string>
 					<reference key="NSSuperview"/>
 					<reference key="NSWindow"/>
-					<reference key="NSNextKeyView" ref="859114042"/>
+					<reference key="NSNextKeyView" ref="174885830"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1680, 1028}}</string>
 				<string key="NSMaxSize">{10000000000000, 10000000000000}</string>
+				<string key="NSFrameAutosaveName">TicketWindow</string>
 				<bool key="NSWindowIsRestorable">YES</bool>
 			</object>
 		</object>
@@ -123,7 +124,7 @@
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">web_view</string>
 						<reference key="source" ref="1001"/>
-						<reference key="destination" ref="859114042"/>
+						<reference key="destination" ref="174885830"/>
 					</object>
 					<int key="connectionID">4</int>
 				</object>
@@ -169,13 +170,13 @@
 						<reference key="object" ref="1006"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="859114042"/>
+							<reference ref="174885830"/>
 						</object>
 						<reference key="parent" ref="1005"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">3</int>
-						<reference key="object" ref="859114042"/>
+						<reference key="object" ref="174885830"/>
 						<reference key="parent" ref="1006"/>
 					</object>
 				</object>
