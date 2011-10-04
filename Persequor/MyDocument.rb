@@ -46,6 +46,9 @@ class MyDocument < NSPersistentDocument
     @previous_row_count = 2 # height that's configured in the nib
 
     @accounts.addObserver(self, forKeyPath:'selection', options:0, context:nil)
+    
+    @table_view.setTarget(self)
+    @table_view.setDoubleAction('rowAction')
 
     init_column_menu
     init_query
@@ -566,6 +569,13 @@ class MyDocument < NSPersistentDocument
         update_account
       end
     end
+  end
+
+
+  # table view action
+  
+  def rowAction
+    puts "clicked: #{@table_view.clickedRow}"
   end
 
 end
