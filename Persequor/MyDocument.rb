@@ -584,14 +584,9 @@ class MyDocument < NSPersistentDocument
     puts "ticket: #{ticket.id}"
     
     vc = TicketWindowController.alloc.initWithWindowNibName("TicketWindow")
+    vc.base_url = selected_account["url"]
+    vc.ticket = ticket
     vc.showWindow(self)
-    #vc.window.makeKeyAndOrderFront
-    puts "window: #{vc.window}"
-    
-    url = "#{selected_account["url"]}/ticket/#{ticket.id}"
-    url = NSURL.URLWithString(url)
-    request = NSURLRequest.requestWithURL(url)
-    vc.web_view.mainFrame.loadRequest(request)
   end
 
 end
