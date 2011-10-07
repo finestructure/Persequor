@@ -241,8 +241,10 @@ class MyDocument < NSPersistentDocument
                       selected_account["username"],
                       keychain_item.password)
       @ticket_cache = TicketCache.new(trac, tickets, updated_at)
-    rescue
+    rescue Exception => e
       puts "failed to initialize ticket cache"
+      puts e.message  
+      puts e.backtrace.inspect  
     end
   end
 
@@ -373,6 +375,9 @@ class MyDocument < NSPersistentDocument
       @is_loading = true
       start_show_progress(0)
 
+      if @ticket_cache == nil
+        init_ticket_cache
+      end
       new_tickets = @ticket_cache.updates
       start_show_progress(new_tickets.size)
 
