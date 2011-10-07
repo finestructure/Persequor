@@ -173,11 +173,14 @@ class MyDocument < NSPersistentDocument
   end
 
   
-  def fetch_rows(entity_name)
+  def fetch_rows(entity_name, predicate_string=nil)
     request = NSFetchRequest.fetchRequestWithEntityName(entity_name)
     raise "no request" unless request
     moc = self.managedObjectContext
     raise "no moc" unless moc
+    if predicate_string
+      request.predicate = NSPredicate.predicateWithFormat(predicate_string)
+    end
     error = Pointer.new_with_type("@")
     rows = moc.executeFetchRequest(request, error:error)
     return rows
@@ -328,12 +331,20 @@ class MyDocument < NSPersistentDocument
   end
   
   
-  def create_entity(ticket)
-    moc = self.managedObjectContext
-    t = NSEntityDescription.insertNewObjectForEntityForName(
-      "Ticket",
-      inManagedObjectContext:moc
-    )
+  def update_ticket(ticket)
+    rows = fetch_rows("Ticket", "id == #{ticket.id}")
+    if rows.size == 1
+      t = rows[0]
+    else
+      puts "multiple entries for #{ticket.id} found, removing extras"
+      moc = self.managedObjectContext
+      rows.each {|t| moc.deleteObject(t)}
+      t = NSEntityDescription.insertNewObjectForEntityForName(
+        "Ticket",
+        inManagedObjectContext:moc
+      )
+    end
+  
     t.id = ticket.id
     t.severity = ticket.severity
     t.milestone = ticket.milestone
@@ -371,7 +382,7 @@ class MyDocument < NSPersistentDocument
           Dispatch::Queue.main.async do
             puts "loaded #{id} #{ticket}"
             @progress_bar.incrementBy(1)
-            create_entity(ticket)
+            update_ticket(ticket)
           end
         end
       end
