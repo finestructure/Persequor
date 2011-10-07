@@ -398,6 +398,12 @@ class MyDocument < NSPersistentDocument
       
       end_show_progress
       @is_loading = false
+      
+      # re-apply filter, a bit hacky but no other way seems to work with 
+      # bindings in place
+      predicate = @predicate_editor.predicate
+      @tickets.setFilterPredicate(nil)
+      @tickets.setFilterPredicate(predicate)
     end
   end
 
