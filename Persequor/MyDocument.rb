@@ -9,6 +9,10 @@
 require 'trac4r/trac'
 require 'mytrac'
 require 'keychain/keychain'
+require 'logger'
+
+$log = Logger.new(STDOUT)
+$log.level = Logger::DEBUG
 
 
 class MyDocument < NSPersistentDocument
@@ -54,10 +58,12 @@ class MyDocument < NSPersistentDocument
     init_query
     
     if core_data_account_set?
+      $log.info("account is set")
       init_accounts
       init_cache_info
       init_ticket_cache
     else
+      $log.info("no account")
       begin_account_sheet
     end
   end
@@ -67,6 +73,9 @@ class MyDocument < NSPersistentDocument
   
   
   def init_accounts
+    # check if the account stored in the document ("cd_account") is also
+    # present in the user defaults (@accounts array)
+    # if not, add it
     cd_account = fetch_rows("Account")[0]
     # first match both desc and url
     res = @accounts.arrangedObjects.find do |a|
@@ -80,8 +89,10 @@ class MyDocument < NSPersistentDocument
     end
     
     if res != nil
+      $log.info("found matching account")
       @accounts.setSelectedObjects([res])
     else
+      $log.info("no matching account, adding it to user defaults")
       account = {
         "desc" => cd_account.desc,
         "url" => cd_account.url,
@@ -174,15 +185,18 @@ class MyDocument < NSPersistentDocument
 
   
   def fetch_rows(entity_name, predicate_string=nil)
+    $log.debug("fetching rows for #{entity_name}")
     request = NSFetchRequest.fetchRequestWithEntityName(entity_name)
     raise "no request" unless request
     moc = self.managedObjectContext
     raise "no moc" unless moc
     if predicate_string
+      $log.debug("setting predicate string to \"#{predicate_string}\"")
       request.predicate = NSPredicate.predicateWithFormat(predicate_string)
     end
     error = Pointer.new_with_type("@")
     rows = moc.executeFetchRequest(request, error:error)
+    $log.debug("fetched #{rows.size} rows")
     return rows
   end
   
@@ -219,15 +233,21 @@ class MyDocument < NSPersistentDocument
 
   def init_cache_info
     rows = fetch_rows("CacheInfo")
-    if rows != []
+    case rows.size
+    when 1
+      $log.info("got cache info")
       @cache_info = rows[0]
+    when 0
+      $log.info("no cache info")
+    else
+      $log.warn("multiple entries for cache info (should not be possible)")
     end
   end
 
 
   def init_ticket_cache
     tickets = fetch_rows("Ticket")
-    puts "tickets loaded: #{tickets.size}"
+    $log.debug("tickets loaded: #{tickets.size}")
     
     if @cache_info == nil
       updated_at = nil
@@ -242,9 +262,9 @@ class MyDocument < NSPersistentDocument
                       keychain_item.password)
       @ticket_cache = TicketCache.new(trac, tickets, updated_at)
     rescue Exception => e
-      puts "failed to initialize ticket cache"
-      puts e.message  
-      puts e.backtrace.inspect  
+      $log.warn("failed to initialize ticket cache")
+      $log.warn(e.message)
+      $log.warn(e.backtrace.inspect)
     end
   end
 
@@ -366,7 +386,7 @@ class MyDocument < NSPersistentDocument
   
   
   def refresh(sender)
-    puts 'loading tickets'
+    $log.debug('loading tickets')
     if @is_loading
       return
     end
@@ -384,7 +404,7 @@ class MyDocument < NSPersistentDocument
         ticket = @ticket_cache.fetch(id)
         if ticket != nil
           Dispatch::Queue.main.async do
-            puts "loaded #{id} #{ticket}"
+            $log.debug("loaded #{id} #{ticket}")
             @progress_bar.incrementBy(1)
             update_ticket(ticket)
           end
@@ -516,25 +536,26 @@ class MyDocument < NSPersistentDocument
       )
     end
     
-    puts "saved service \"#{service}\" in keychain"
+    $log.debug("saved service \"#{service}\" in keychain")
   end
  
   
   def update_account
     index = @accounts.selectionIndex
     if index == NSNotFound
-      puts "nothing selected"
+      $log.debug("nothing selected")
       return
     end
 
     if not core_data_account_set?
-      puts "create new account"
+      $log.debug("create new account")
       moc = self.managedObjectContext
       account = NSEntityDescription.insertNewObjectForEntityForName(
         "Account",
         inManagedObjectContext:moc
       )
     else
+      $log.debug("got account")
       account = fetch_rows("Account")[0]
     end
     
@@ -544,7 +565,7 @@ class MyDocument < NSPersistentDocument
     account.username = selected_account["username"]    
     
     # invalidate cache
-    puts "invalidating cache"
+    $log.debug("invalidating cache")
     delete_rows("Ticket")
     delete_rows("CacheInfo")
     init_cache_info
@@ -553,7 +574,7 @@ class MyDocument < NSPersistentDocument
  
  
   def sheetDidEnd(sheet, returnCode: returnCode, contextInfo: contextInfo)
-    puts "sheet ended: #{returnCode}"
+    $log.debug("sheet ended: #{returnCode}")
     if @previous_account != selected_account
       update_account
       save_password
@@ -596,13 +617,13 @@ class MyDocument < NSPersistentDocument
   # table view action
   
   def rowAction
-    puts "clicked: #{@table_view.clickedRow}"
+    $log.debug("clicked: #{@table_view.clickedRow}")
     row_index = @table_view.clickedRow
     
     return if row_index == -1
     
     ticket = @tickets.arrangedObjects[row_index]
-    puts "ticket: #{ticket.id}"
+    $log.debug("ticket: #{ticket.id}")
     
     vc = TicketWindowController.alloc.initWithWindowNibName("TicketWindow")
     vc.base_url = selected_account["url"]
