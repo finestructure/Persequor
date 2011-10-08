@@ -631,6 +631,13 @@ class MyDocument < NSPersistentDocument
     vc.ticket = ticket
     vc.showWindow(self)
   end
+  
+  
+  # autosaving
+  
+  def self.autosavesInPlace
+    return true
+  end
 
 end
 
