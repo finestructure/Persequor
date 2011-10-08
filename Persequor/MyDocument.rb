@@ -49,11 +49,6 @@ class MyDocument < NSPersistentDocument
     @predicate_editor.enclosingScrollView.setHasVerticalScroller(false)
     @previous_row_count = 2 # height that's configured in the nib
 
-    @accounts.addObserver(self, forKeyPath:'selection', options:0, context:nil)
-    
-    @table_view.setTarget(self)
-    @table_view.setDoubleAction('rowAction')
-
     init_column_menu
     init_query
     
@@ -66,6 +61,12 @@ class MyDocument < NSPersistentDocument
       $log.info("no account")
       begin_account_sheet
     end
+
+    # this KVO observer needs to come after the init methods (see #15)
+    @accounts.addObserver(self, forKeyPath:'selection', options:0, context:nil)
+    
+    @table_view.setTarget(self)
+    @table_view.setDoubleAction('rowAction')
   end
 
 
