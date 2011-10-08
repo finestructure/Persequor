@@ -338,7 +338,6 @@ class MyDocument < NSPersistentDocument
     if rows.size == 1
       t = rows[0]
     else
-      puts "multiple entries for #{ticket.id} found, removing extras"
       moc = self.managedObjectContext
       rows.each {|t| moc.deleteObject(t)}
       t = NSEntityDescription.insertNewObjectForEntityForName(
