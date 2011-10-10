@@ -171,6 +171,7 @@
 				5A57A4D41425F1A7000F496A /* Sources */,
 				5A57A4D51425F1A7000F496A /* Frameworks */,
 				5A57A4D61425F1A7000F496A /* Resources */,
+				5A36423A1443538200180D71 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -228,6 +229,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		5A36423A1443538200180D71 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "git status\nversion=$(git describe --tags --dirty)\n\n# version can be empty when there are no tags, use rev-parse in that case\n# to log the last commit id\nif [[ -z \"$version\" ]]; then\n  diff=$(git diff)\n  version=$(git rev-parse --short HEAD)\n\n  if [[ -n \"$diff\" ]]; then\n    version=${version}-dirty\n  fi\nfi\n\necho version: $version\n\ninfo_plist=$BUILT_PRODUCTS_DIR/$PRODUCT_NAME.app/Contents/Info.plist\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $version\" $info_plist";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		5A57A4D41425F1A7000F496A /* Sources */ = {
