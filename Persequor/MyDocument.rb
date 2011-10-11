@@ -524,7 +524,7 @@ class MyDocument < NSPersistentDocument
   
   
   def edit_accounts(sender)
-    @previous_account = selected_account
+    @previous_account = selected_account.dup
     app = NSApplication.sharedApplication
     app.beginSheet(
       @account_window,
@@ -603,7 +603,10 @@ class MyDocument < NSPersistentDocument
  
   def sheetDidEnd(sheet, returnCode: returnCode, contextInfo: contextInfo)
     $log.debug("sheet ended: #{returnCode}")
-    if @previous_account != selected_account
+    if @previous_account["url"] != selected_account["url"] or \
+       @previous_account["username"] != selected_account["username"] or \
+       @previous_account["password"] != selected_account["password"] or
+      $log.debug("account updated")
       update_account
       save_password
     end
