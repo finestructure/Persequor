@@ -266,6 +266,7 @@ class MyDocument < NSPersistentDocument
       $log.warn("failed to initialize ticket cache")
       $log.warn(e.message)
       $log.warn(e.backtrace.inspect)
+      @ticket_cache = nil
     end
   end
 
