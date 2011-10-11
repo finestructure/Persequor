@@ -607,8 +607,8 @@ class MyDocument < NSPersistentDocument
        @previous_account["username"] != selected_account["username"] or \
        @previous_account["password"] != selected_account["password"] or
       $log.debug("account updated")
-      update_account
       save_password
+      update_account
     end
   end
   
