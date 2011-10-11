@@ -426,7 +426,16 @@ class MyDocument < NSPersistentDocument
       rescue => e
         $log.warn(e.inspect)
         if e.inspect =~ /ECONNREFUSED/
-          $log.warn("auth failure")
+          $log.warn("connection failure")
+          alert = NSAlert.alloc.init
+          alert.addButtonWithTitle("Edit Settings")
+          alert.messageText = "Connection Failure"
+          alert.informativeText = "Could not connect to #{selected_account["url"]}. Please validate your login settings."
+          Dispatch::Queue.main.sync do
+            if alert.runModal == NSAlertFirstButtonReturn
+              edit_accounts(self)
+            end
+          end
         end
       ensure
         end_show_progress
