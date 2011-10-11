@@ -108,3 +108,52 @@ class Test02TicketCache < Test::Unit::TestCase
   
 end
 
+
+class Test00ConnectionFailures < Test::Unit::TestCase
+
+  def test_01_bad_password
+    trac = Trac.new(TRAC_URL, USER, "bad")
+    begin
+      trac.tickets.list
+      raise "must not reach this poin"
+    rescue Trac::TracException => e
+      assert_equal("Authorization failed.\n401 Unauthorized", e.message)
+    end
+  end
+
+  def test_02_bad_username
+    trac = Trac.new(TRAC_URL, "bad", PASS)
+    begin
+      trac.tickets.list
+      raise "must not reach this poin"
+    rescue Trac::TracException => e
+      assert_equal("Authorization failed.\n401 Unauthorized", e.message)
+    end
+  end
+
+  def test_03_bad_url_1
+    trac = Trac.new("http://bad", USER, PASS)
+    begin
+      trac.tickets.list
+      raise "must not reach this poin"
+    rescue SocketError => e
+      assert_equal("getaddrinfo: nodename nor servname provided, or not known",
+        e.message)
+    end
+  end
+
+  def test_04_bad_url_2
+    trac = Trac.new("http://localhost:99999", USER, PASS)
+    begin
+      trac.tickets.list
+      raise "must not reach this poin"
+    rescue SocketError => e
+      assert_equal("getaddrinfo: nodename nor servname provided, or not known",
+        e.message)
+    end
+  end
+
+end
+
+
+
