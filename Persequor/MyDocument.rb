@@ -386,6 +386,29 @@ class MyDocument < NSPersistentDocument
   end
   
   
+  # alert shown for connection errors occurring during refresh
+  def show_alert_for_exception(e)
+    $log.warn(e)
+    $log.warn(e.inspect)
+    alert = NSAlert.alloc.init
+    alert.addButtonWithTitle("Edit Settings")
+    if e.inspect =~ /Authorization failed/
+      alert.messageText = "Authorization Failure"
+      alert.informativeText = "Could not log in to " \
+        "#{selected_account["url"]}. Please validate your login settings."
+    else
+      alert.messageText = "Connection Failure"
+      alert.informativeText = "Could not connect to " \
+        "#{selected_account["url"]}. Please validate your login settings."
+    end
+    Dispatch::Queue.main.sync do
+      if alert.runModal == NSAlertFirstButtonReturn
+        edit_accounts(self)
+      end
+    end
+  end
+  
+  
   def refresh(sender)
     $log.debug('loading tickets')
     if @is_loading
@@ -395,12 +418,11 @@ class MyDocument < NSPersistentDocument
       @is_loading = true
       start_show_progress(0)
 
-      if @ticket_cache == nil
-        init_ticket_cache
-      end
+      init_ticket_cache if @ticket_cache == nil
       
       begin
         new_tickets = @ticket_cache.updates
+        $log.debug("fetched #{new_tickets.size} updates")
         start_show_progress(new_tickets.size)
   
         new_tickets.each do |id|
@@ -423,20 +445,8 @@ class MyDocument < NSPersistentDocument
         predicate = @predicate_editor.predicate
         @tickets.setFilterPredicate(nil)
         @tickets.setFilterPredicate(predicate)
-      rescue => e
-        $log.warn(e.inspect)
-        if e.inspect =~ /ECONNREFUSED/
-          $log.warn("connection failure")
-          alert = NSAlert.alloc.init
-          alert.addButtonWithTitle("Edit Settings")
-          alert.messageText = "Connection Failure"
-          alert.informativeText = "Could not connect to #{selected_account["url"]}. Please validate your login settings."
-          Dispatch::Queue.main.sync do
-            if alert.runModal == NSAlertFirstButtonReturn
-              edit_accounts(self)
-            end
-          end
-        end
+      rescue Exception => e
+        show_alert_for_exception(e)
       ensure
         end_show_progress
         @is_loading = false
