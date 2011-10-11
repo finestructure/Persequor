@@ -398,32 +398,40 @@ class MyDocument < NSPersistentDocument
       if @ticket_cache == nil
         init_ticket_cache
       end
-      new_tickets = @ticket_cache.updates
-      start_show_progress(new_tickets.size)
-
-      new_tickets.each do |id|
-        ticket = @ticket_cache.fetch(id)
-        if ticket != nil
-          Dispatch::Queue.main.async do
-            $log.debug("loaded #{id} #{ticket}")
-            @progress_bar.incrementBy(1)
-            update_ticket(ticket)
+      
+      begin
+        new_tickets = @ticket_cache.updates
+        start_show_progress(new_tickets.size)
+  
+        new_tickets.each do |id|
+          ticket = @ticket_cache.fetch(id)
+          if ticket != nil
+            Dispatch::Queue.main.async do
+              $log.debug("loaded #{id} #{ticket}")
+              @progress_bar.incrementBy(1)
+              update_ticket(ticket)
+            end
           end
         end
-      end
-      if new_tickets.size > 0
-        # don't mark dirty if there were no changes
-        cache_info.updated_at = @ticket_cache.updated_at
-      end
+        if new_tickets.size > 0
+          # don't mark dirty if there were no changes
+          cache_info.updated_at = @ticket_cache.updated_at
+        end
       
-      end_show_progress
-      @is_loading = false
-      
-      # re-apply filter, a bit hacky but no other way seems to work with 
-      # bindings in place
-      predicate = @predicate_editor.predicate
-      @tickets.setFilterPredicate(nil)
-      @tickets.setFilterPredicate(predicate)
+        # re-apply filter, a bit hacky but no other way seems to work with 
+        # bindings in place
+        predicate = @predicate_editor.predicate
+        @tickets.setFilterPredicate(nil)
+        @tickets.setFilterPredicate(predicate)
+      rescue => e
+        $log.warn(e.inspect)
+        if e.inspect =~ /ECONNREFUSED/
+          $log.warn("auth failure")
+        end
+      ensure
+        end_show_progress
+        @is_loading = false
+      end
     end
   end
 
