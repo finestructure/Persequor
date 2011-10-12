@@ -441,14 +441,10 @@ class MyDocument < NSPersistentDocument
           cache_info.updated_at = @ticket_cache.updated_at
         end
       
-        # re-apply filter, a bit hacky but no other way seems to work with 
-        # bindings in place
-        predicate = @predicate_editor.predicate
-        @tickets.setFilterPredicate(nil)
-        @tickets.setFilterPredicate(predicate)
       rescue Exception => e
         show_alert_for_exception(e)
       ensure
+        Dispatch::Queue.main.async{ @tickets.rearrangeObjects }
         end_show_progress
         @is_loading = false
       end
