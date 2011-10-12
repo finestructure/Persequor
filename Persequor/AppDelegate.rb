@@ -10,7 +10,14 @@
 class AppDelegate
   
   def refresh(sender)
-    NSDocumentController.sharedDocumentController.currentDocument.refresh(sender)
+    doc = NSDocumentController.sharedDocumentController.currentDocument
+    doc.refresh(sender)
   end
   
+  def new_ticket(sender)
+    puts "new ticket"
+    doc = NSDocumentController.sharedDocumentController.currentDocument
+    doc.new_ticket(sender)
+  end
+
 end

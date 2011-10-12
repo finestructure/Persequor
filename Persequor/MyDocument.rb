@@ -666,5 +666,28 @@ class MyDocument < NSPersistentDocument
     return true
   end
 
+
+  # new ticket
+  
+  def new_ticket(sender)
+    puts "new ticket"
+    app = NSApplication.sharedApplication
+    wc = NSWindowController.alloc.initWithWindowNibName("NewTicket")
+    app.beginSheet(
+      wc.window,
+      modalForWindow:self.windowForSheet,
+      modalDelegate:self,
+      didEndSelector:"newTicketSheetDidEnd:returnCode:contextInfo:",
+      contextInfo:nil
+    )
+  end
+
+
+  def newTicketSheetDidEnd(sheet, returnCode: returnCode,
+    contextInfo: contextInfo)
+    $log.debug("new ticket sheet ended: #{returnCode}")
+  end
+
+
 end
 
