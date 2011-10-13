@@ -1,7 +1,4 @@
-require 'rubygems'
-require 'trac4r/trac'
 require 'test/unit'
-require 'time'
 require 'mytrac'
 
 TRAC_URL = "http://localhost:8080"
