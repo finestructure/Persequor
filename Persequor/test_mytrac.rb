@@ -108,6 +108,16 @@ class Test02TicketCache < Test::Unit::TestCase
   end
 
   
+  def test_04_updates
+    @trac.tickets.create("test1", "description")
+    @trac.tickets.create("test2", "description")
+    sleep 2 # make we pass enough time to avoid the offset in 'updates'
+    updates = @cache.updates
+    assert_equal([1,2,3], updates)
+    updates = @cache.updates
+    assert_equal([], updates)
+  end
+  
 end
 
 
