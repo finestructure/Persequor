@@ -52,6 +52,11 @@ class Test01Trac < Test::Unit::TestCase
 end
 
 
+# make private methods public for testing
+class TicketCache
+  public :update
+end
+
 
 class Test02TicketCache < Test::Unit::TestCase
   
