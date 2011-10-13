@@ -15,18 +15,9 @@ class AppDelegate
   end
   
   def new_ticket(sender)
-    app = NSApplication.sharedApplication
     doc = NSDocumentController.sharedDocumentController.currentDocument
-
     wc = NewTicketController.alloc.initWithWindowNibName("NewTicket")
-    wc.document = doc
-    app.beginSheet(
-      wc.window,
-      modalForWindow:doc.windowForSheet,
-      modalDelegate:wc,
-      didEndSelector:"newTicketSheetDidEnd:returnCode:contextInfo:",
-      contextInfo:nil
-    )
+    wc.begin_sheet_for_document(doc)
   end
 
 end
