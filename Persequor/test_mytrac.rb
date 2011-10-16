@@ -1,7 +1,4 @@
-require 'rubygems'
-require 'trac4r/trac'
 require 'test/unit'
-require 'time'
 require 'mytrac'
 
 TRAC_URL = "http://localhost:8080"
@@ -55,6 +52,11 @@ class Test01Trac < Test::Unit::TestCase
 end
 
 
+# make private methods public for testing
+class TicketCache
+  public :update
+end
+
 
 class Test02TicketCache < Test::Unit::TestCase
   
@@ -62,7 +64,7 @@ class Test02TicketCache < Test::Unit::TestCase
     @trac = Trac.new(TRAC_URL, USER, PASS)
     @trac.tickets.create("test", "description")
     
-    @cache = TicketCache.new(@trac)
+    @cache = TicketCache.new(TRAC_URL, USER, PASS)
   end
 
   def teardown
@@ -105,6 +107,16 @@ class Test02TicketCache < Test::Unit::TestCase
     assert_equal(0, res.size)
   end
 
+  
+  def test_04_updates
+    @trac.tickets.create("test1", "description")
+    @trac.tickets.create("test2", "description")
+    sleep 2 # make we pass enough time to avoid the offset in 'updates'
+    updates = @cache.updates
+    assert_equal([1,2,3], updates)
+    updates = @cache.updates
+    assert_equal([], updates)
+  end
   
 end
 
