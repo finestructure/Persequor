@@ -359,6 +359,7 @@ class MyDocument < NSPersistentDocument
   
   def new_ticket(ticket)
     $log.debug("new ticket: #{ticket}")
+    @ticket_cache.create(ticket)
   end
   
   
