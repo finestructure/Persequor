@@ -48,6 +48,14 @@ class TicketCache
   end
 
 
+  def create(ticket)
+    attributes = ticket
+    summary = attributes.delete('summary')
+    description = attributes.delete('description') || ''
+    @trac.tickets.create(summary, description, attributes)
+  end
+
+
   private
 
   # currently not used due to threading issues

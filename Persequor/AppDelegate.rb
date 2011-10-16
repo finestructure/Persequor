@@ -10,7 +10,14 @@
 class AppDelegate
   
   def refresh(sender)
-    NSDocumentController.sharedDocumentController.currentDocument.refresh(sender)
+    doc = NSDocumentController.sharedDocumentController.currentDocument
+    doc.refresh(sender)
   end
   
+  def new_ticket(sender)
+    doc = NSDocumentController.sharedDocumentController.currentDocument
+    wc = NewTicketController.alloc.initWithWindowNibName("NewTicket")
+    wc.begin_sheet_for_document(doc)
+  end
+
 end
