@@ -6,7 +6,6 @@
 #  Copyright 2011 abstracture GmbH & Co. KG. All rights reserved.
 #
 
-require 'trac4r/trac'
 require 'mytrac'
 require 'keychain/keychain'
 require 'logger'
@@ -258,10 +257,13 @@ class MyDocument < NSPersistentDocument
     
     begin
       keychain_item = keychain_item_for_account(selected_account)
-      trac = Trac.new(selected_account["url"],
-                      selected_account["username"],
-                      keychain_item.password)
-      @ticket_cache = TicketCache.new(trac, tickets, updated_at)
+      @ticket_cache = TicketCache.new(
+        selected_account["url"],
+        selected_account["username"],
+        keychain_item.password,
+        tickets,
+        updated_at
+      )
     rescue Exception => e
       $log.warn("failed to initialize ticket cache")
       $log.warn(e.message)

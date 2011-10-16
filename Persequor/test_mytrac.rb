@@ -64,7 +64,7 @@ class Test02TicketCache < Test::Unit::TestCase
     @trac = Trac.new(TRAC_URL, USER, PASS)
     @trac.tickets.create("test", "description")
     
-    @cache = TicketCache.new(@trac)
+    @cache = TicketCache.new(TRAC_URL, USER, PASS)
   end
 
   def teardown
