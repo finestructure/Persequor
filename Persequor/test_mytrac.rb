@@ -62,6 +62,7 @@ class Test02TicketCache < Test::Unit::TestCase
   
   def setup
     @trac = Trac.new(TRAC_URL, USER, PASS)
+    @trac.tickets.list.each{ |id| @trac.tickets.delete(id) }
     @trac.tickets.create("test", "description")
     
     @cache = TicketCache.new(TRAC_URL, USER, PASS)
@@ -120,10 +121,11 @@ class Test02TicketCache < Test::Unit::TestCase
   
   
   def test_05_create
-    ticket = {summary:'my summary', description:'my description',
-      milestone:'my milestone', priority:'my priority', version:'my version',
-      reporter:'my reporter', owner:'my owner', cc:'my, cc',
-      keywords:'my keywords', component:'my component', type:'my type'}
+    ticket = {'summary'=>'my summary', 'description'=>'my description',
+      'milestone'=>'my milestone', 'priority'=>'my priority',
+      'version'=>'my version', 'reporter'=>'my reporter',
+      'owner'=>'my owner', 'cc'=>'my, cc', 'keywords'=>'my keywords',
+      'component'=>'my component', 'type'=>'my type'}
     @cache.create(ticket)
     updates = @cache.updates
     assert_equal([1,2], updates)
