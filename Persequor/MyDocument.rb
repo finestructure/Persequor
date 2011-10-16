@@ -357,6 +357,11 @@ class MyDocument < NSPersistentDocument
   end
   
   
+  def new_ticket(ticket)
+    $log.debug("new ticket: #{ticket}")
+  end
+  
+  
   def update_ticket(ticket)
     rows = fetch_rows("Ticket", "id == #{ticket.id}")
     if rows.size == 1
