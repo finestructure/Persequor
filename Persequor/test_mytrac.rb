@@ -118,6 +118,29 @@ class Test02TicketCache < Test::Unit::TestCase
     assert_equal([], updates)
   end
   
+  
+  def test_05_create
+    ticket = {summary:'my summary', description:'my description',
+      milestone:'my milestone', priority:'my priority', version:'my version',
+      reporter:'my reporter', owner:'my owner', cc:'my, cc',
+      keywords:'my keywords', component:'my component', type:'my type'}
+    @cache.create(ticket)
+    updates = @cache.updates
+    assert_equal([1,2], updates)
+    t = @cache.fetch(2)
+    assert_equal('my summary', t.summary)
+    assert_equal('my description', t.description)
+    assert_equal('new', t.status)
+    assert_equal('my priority', t.priority)
+    assert_equal('my version', t.version)
+    assert_equal('my reporter', t.reporter)
+    assert_equal('my owner', t.owner)
+    assert_equal('my, cc', t.cc)
+    assert_equal('my keywords', t.keywords)
+    assert_equal('my component', t.component)
+    assert_equal('my type', t.type)
+  end
+  
 end
 
 
