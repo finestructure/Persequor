@@ -21,4 +21,14 @@ class TicketWindowController < NSWindowController
     self.window.makeKeyAndOrderFront(self)
   end
   
+  
+  def back_forward_selector(sender)
+    case sender.selectedSegment
+    when 0
+      @web_view.goBack
+    when 1
+      @web_view.goForward
+    end
+  end
+  
 end
