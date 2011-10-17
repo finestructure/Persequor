@@ -11,14 +11,27 @@ class TicketWindowController < NSWindowController
   attr_accessor :base_url
   attr_accessor :ticket
   attr_accessor :web_view
+  attr_accessor :spinner
+  
   
   def windowDidLoad
     puts "windowDidLoad #{self.window}"
     self.window.title = "Ticket #{@ticket.id}"
     url = NSURL.URLWithString("#{@base_url}/ticket/#{@ticket.id}")
     request = NSURLRequest.requestWithURL(url)
+    @web_view.frameLoadDelegate = self
     @web_view.mainFrame.loadRequest(request)
     self.window.makeKeyAndOrderFront(self)
+  end
+  
+
+  def webView(sender, didStartProvisionalLoadForFrame:frame)
+    @spinner.startAnimation(self)
+  end
+
+  
+  def webView(sender, didFinishLoadForFrame:frame)
+    @spinner.stopAnimation(self)
   end
   
   
