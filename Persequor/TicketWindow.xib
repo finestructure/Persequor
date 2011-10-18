@@ -90,7 +90,7 @@
 								<object class="NSSegmentedControl" key="NSToolbarItemView" id="197880296">
 									<reference key="NSNextResponder"/>
 									<int key="NSvFlags">268</int>
-									<string key="NSFrame">{{0, 14}, {49, 25}}</string>
+									<string key="NSFrame">{{0, 14}, {45, 25}}</string>
 									<reference key="NSSuperview"/>
 									<reference key="NSWindow"/>
 									<reference key="NSNextKeyView"/>
@@ -130,13 +130,13 @@
 										</object>
 										<int key="NSSelectedSegment">1</int>
 										<int key="NSTrackingMode">2</int>
-										<int key="NSSegmentStyle">2</int>
+										<int key="NSSegmentStyle">4</int>
 									</object>
 								</object>
 								<nil key="NSToolbarItemImage"/>
 								<nil key="NSToolbarItemTarget"/>
 								<nil key="NSToolbarItemAction"/>
-								<string key="NSToolbarItemMinSize">{49, 25}</string>
+								<string key="NSToolbarItemMinSize">{45, 25}</string>
 								<string key="NSToolbarItemMaxSize">{104, 25}</string>
 								<bool key="NSToolbarItemEnabled">YES</bool>
 								<bool key="NSToolbarItemAutovalidates">YES</bool>
@@ -209,7 +209,7 @@
 							</object>
 						</object>
 					</object>
-					<object class="NSMutableArray" key="NSToolbarIBAllowedItems">
+					<object class="NSArray" key="NSToolbarIBAllowedItems">
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<reference ref="522147296"/>
 						<reference ref="293134199"/>
