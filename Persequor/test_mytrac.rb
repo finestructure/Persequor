@@ -143,6 +143,12 @@ class Test02TicketCache < Test::Unit::TestCase
     assert_equal('my type', t.type)
   end
   
+  
+  def test_06_statuses
+    assert_equal(["accepted", "assigned", "closed", "new", "reopened"],
+      @cache.statuses)
+  end
+  
 end
 
 

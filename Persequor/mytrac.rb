@@ -22,6 +22,7 @@ class TicketCache
     @updated_at = updated_at
   end
 
+
   def updates
     if @updated_at == nil
       @updated_at = Time.now
@@ -55,6 +56,11 @@ class TicketCache
     @trac.tickets.create(summary, description, attributes)
   end
 
+
+  def statuses
+    return @trac.tickets.settings[:status]
+  end
+  
 
   private
 
