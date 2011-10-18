@@ -376,11 +376,12 @@ class MyDocument < NSPersistentDocument
         inManagedObjectContext:moc
       )
     end
-  
+     
     t.id = ticket.id
     t.severity = ticket.severity
     t.milestone = ticket.milestone
     t.status = ticket.status
+    t.type = ticket.type
     t.priority = ticket.priority
     t.version = ticket.version
     t.reporter = ticket.reporter
