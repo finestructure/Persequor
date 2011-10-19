@@ -9,11 +9,22 @@
 
 class NewTicketController < NSWindowController
 
+  attr_accessor :components
   attr_accessor :document
   attr_accessor :new_ticket
   
+  def initWithWindowNibName(nib)
+    super(nib)
+    if self != nil
+      @components = NSArrayController.alloc.init
+    end
+    return self
+  end
+  
+  
   def begin_sheet_for_document(doc)
     @document = doc
+    @components.setContent([""] + @document.ticket_cache.components)
     @new_ticket = {}
     NSApplication.sharedApplication.beginSheet(
       self.window,
@@ -40,6 +51,7 @@ class NewTicketController < NSWindowController
       # cancel => do nothing
     when 1
       # create ticket
+      @new_ticket["component"] = @components.selectedObjects[0]
       @document.new_ticket(@new_ticket)
     end
   end

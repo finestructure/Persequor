@@ -25,6 +25,7 @@ class MyDocument < NSPersistentDocument
   attr_accessor :progress_label
   attr_accessor :refresh_button
   attr_accessor :table_view
+  attr_accessor :ticket_cache
   attr_accessor :tickets
   attr_accessor :toolbar_view
 
