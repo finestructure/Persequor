@@ -149,6 +149,12 @@ class Test02TicketCache < Test::Unit::TestCase
       @cache.statuses)
   end
   
+  
+  def test_07_components
+    assert_equal(["component1", "component2"],
+      @cache.components)
+  end
+  
 end
 
 

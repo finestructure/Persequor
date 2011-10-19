@@ -62,6 +62,11 @@ class TicketCache
   end
   
 
+  def components
+    return @trac.tickets.settings[:component]
+  end
+  
+
   private
 
   # currently not used due to threading issues
