@@ -67,6 +67,16 @@ class TicketCache
   end
   
 
+  def milestones
+    return @trac.tickets.settings[:milestone]
+  end
+  
+
+  def types
+    return @trac.tickets.settings[:type]
+  end
+  
+
   private
 
   # currently not used due to threading issues

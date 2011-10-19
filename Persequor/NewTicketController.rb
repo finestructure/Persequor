@@ -11,12 +11,17 @@ class NewTicketController < NSWindowController
 
   attr_accessor :components
   attr_accessor :document
+  attr_accessor :milestones
   attr_accessor :new_ticket
+  attr_accessor :types
+  
   
   def initWithWindowNibName(nib)
     super(nib)
     if self != nil
       @components = NSArrayController.alloc.init
+      @milestones = NSArrayController.alloc.init
+      @types = NSArrayController.alloc.init
     end
     return self
   end
@@ -24,7 +29,12 @@ class NewTicketController < NSWindowController
   
   def begin_sheet_for_document(doc)
     @document = doc
+    
     @components.setContent([""] + @document.ticket_cache.components)
+    @milestones.setContent([""] + @document.ticket_cache.milestones)
+    @types.setContent(@document.ticket_cache.types)
+    @types.setSelectedObjects(["task"])
+    
     @new_ticket = {}
     NSApplication.sharedApplication.beginSheet(
       self.window,
@@ -52,6 +62,8 @@ class NewTicketController < NSWindowController
     when 1
       # create ticket
       @new_ticket["component"] = @components.selectedObjects[0]
+      @new_ticket["milestone"] = @milestones.selectedObjects[0]
+      @new_ticket["type"] = @types.selectedObjects[0]
       @document.new_ticket(@new_ticket)
     end
   end

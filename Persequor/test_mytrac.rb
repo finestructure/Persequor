@@ -155,6 +155,18 @@ class Test02TicketCache < Test::Unit::TestCase
       @cache.components)
   end
   
+
+  def test_08_milestones
+    assert_equal(["milestone1", "milestone2", "milestone3", "milestone4"],
+      @cache.milestones)
+  end
+  
+
+  def test_09_types
+    assert_equal(["defect", "enhancement", "task"],
+      @cache.types)
+  end
+  
 end
 
 
