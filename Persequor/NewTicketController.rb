@@ -19,6 +19,7 @@ class NewTicketController < NSWindowController
   def initWithWindowNibName(nib)
     super(nib)
     if self != nil
+      @last_typed = {}
       @components = NSArrayController.alloc.init
       @milestones = NSArrayController.alloc.init
       @types = NSArrayController.alloc.init
@@ -67,7 +68,6 @@ class NewTicketController < NSWindowController
     case returnCode
     when 0
       # cancel => do nothing
-      puts "new ticket: #{@new_ticket}"
     when 1
       # create ticket
       @new_ticket["component"] = @components.selectedObjects[0]
@@ -82,14 +82,10 @@ class NewTicketController < NSWindowController
   
   def control(control, textView:textView, completions:words, 
     forPartialWordRange:charRange, indexOfSelectedItem:index)
-    # prevent auto-selection
-    #index.assign(-1)
     typed = textView.string.substringWithRange(charRange)
-    puts "typed: >#{typed}<"
     if typed != ""
       completions = @users.find_all{ |i| i.start_with?(typed) }
     end
-    puts "completions: #{completions}"
     return completions
   end
 
@@ -100,20 +96,13 @@ class NewTicketController < NSWindowController
     end
   
     @complete_posting = true
-  
-    case notification.object.tag
-    when 0 # reporter
-      field_editor = notification.userInfo.objectForKey("NSFieldEditor")
-      text_changed = @last_typed != field_editor.string
-       
-      if text_changed
-        @last_typed = field_editor.string.copy
-        field_editor.complete(nil)
-      end
-    when 1 # owner
-      puts "owner"
-    when 2 # cc
-      puts "cc"
+
+    field_editor = notification.userInfo.objectForKey("NSFieldEditor")
+    tag = notification.object.tag
+    text_changed = @last_typed[tag] != field_editor.string
+    if text_changed
+      @last_typed = field_editor.string.copy
+      field_editor.complete(nil)
     end
     
     @complete_posting = false
