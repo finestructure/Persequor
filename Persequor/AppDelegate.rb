@@ -17,7 +17,7 @@ class AppDelegate
   def new_ticket(sender)
     doc = NSDocumentController.sharedDocumentController.currentDocument
     wc = NewTicketController.alloc.initWithWindowNibName("NewTicket")
-    wc.begin_sheet_for_document(doc)
+    wc.begin_sheet_for_document(doc, ticket_cache:doc.ticket_cache)
   end
 
 end

@@ -28,16 +28,16 @@ class NewTicketController < NSWindowController
   end
   
   
-  def begin_sheet_for_document(doc)
+  def begin_sheet_for_document(doc, ticket_cache:ticket_cache)
     @document = doc
     
-    @components.setContent([""] + @document.ticket_cache.components)
-    @milestones.setContent([""] + @document.ticket_cache.milestones)
-    @types.setContent(@document.ticket_cache.types)
+    @components.setContent([""] + ticket_cache.components)
+    @milestones.setContent([""] + ticket_cache.milestones)
+    @types.setContent(ticket_cache.types)
     @types.setSelectedObjects(["task"])
     
     @users = []
-    @document.tickets.arrangedObjects.each do |t|
+    ticket_cache.tickets.each do |_,t|
       @users << t.reporter
       @users << t.owner
       @users << t.cc
