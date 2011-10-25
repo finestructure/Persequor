@@ -13,8 +13,10 @@ end
 class TicketCache
   attr_accessor :tickets
   attr_accessor :updated_at
+  attr_accessor :username
 
   def initialize(url, username, password, tickets=[], updated_at=nil)
+    @username = username
     @trac = Trac.new(url, username, password)
 
     @tickets = {}

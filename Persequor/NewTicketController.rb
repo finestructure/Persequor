@@ -44,7 +44,7 @@ class NewTicketController < NSWindowController
     end
     @users.uniq!
     
-    @new_ticket = {}
+    @new_ticket = {'reporter'=>ticket_cache.username}
     NSApplication.sharedApplication.beginSheet(
       self.window,
       modalForWindow:doc.windowForSheet,
