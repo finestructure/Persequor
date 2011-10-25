@@ -53,7 +53,7 @@ class TicketCache
 
   def create(ticket)
     attributes = ticket
-    summary = attributes.delete('summary')
+    summary = attributes.delete('summary') || ''
     description = attributes.delete('description') || ''
     @trac.tickets.create(summary, description, attributes)
   end
