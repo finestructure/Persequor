@@ -1,5 +1,5 @@
 #
-#  TicketWindowController.rb
+#  WebWindowController.rb
 #  Persequor
 #
 #  Created by Sven A. Schmidt on 04.10.11.
@@ -7,7 +7,7 @@
 #
 
 
-class TicketWindowController < NSWindowController
+class WebWindowController < NSWindowController
   attr_accessor :url
   attr_accessor :ticket
   attr_accessor :web_view

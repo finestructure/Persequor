@@ -23,9 +23,9 @@
 		5A8C890F1445E5480092F7EE /* AppDelegate.rb in Resources */ = {isa = PBXBuildFile; fileRef = 5A8C890E1445E5480092F7EE /* AppDelegate.rb */; };
 		5A8C89121445E7E50092F7EE /* NewTicket.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5A8C89111445E7E50092F7EE /* NewTicket.xib */; };
 		5AEC2AA31434A5E70022D4BD /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 5AEC2AA21434A5E70022D4BD /* icon.icns */; };
-		5AEC2AEF143B5E550022D4BD /* TicketWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5AEC2AEE143B5E550022D4BD /* TicketWindow.xib */; };
+		5AEC2AEF143B5E550022D4BD /* WebWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5AEC2AEE143B5E550022D4BD /* WebWindow.xib */; };
 		5AEC2AF2143B61600022D4BD /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AEC2AF1143B61600022D4BD /* WebKit.framework */; };
-		5AEC2AF4143B619C0022D4BD /* TicketWindowController.rb in Resources */ = {isa = PBXBuildFile; fileRef = 5AEC2AF3143B619C0022D4BD /* TicketWindowController.rb */; };
+		5AEC2AF4143B619C0022D4BD /* WebWindowController.rb in Resources */ = {isa = PBXBuildFile; fileRef = 5AEC2AF3143B619C0022D4BD /* WebWindowController.rb */; };
 		5AF68636144B35C700E42EF7 /* NewTicketController.rb in Resources */ = {isa = PBXBuildFile; fileRef = 5AF68635144B35C700E42EF7 /* NewTicketController.rb */; };
 /* End PBXBuildFile section */
 
@@ -59,9 +59,9 @@
 		5A8C890E1445E5480092F7EE /* AppDelegate.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = AppDelegate.rb; sourceTree = "<group>"; };
 		5A8C89111445E7E50092F7EE /* NewTicket.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewTicket.xib; sourceTree = "<group>"; };
 		5AEC2AA21434A5E70022D4BD /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = icon.icns; path = Resources/icon.icns; sourceTree = "<group>"; };
-		5AEC2AEE143B5E550022D4BD /* TicketWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TicketWindow.xib; sourceTree = "<group>"; };
+		5AEC2AEE143B5E550022D4BD /* WebWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WebWindow.xib; sourceTree = "<group>"; };
 		5AEC2AF1143B61600022D4BD /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
-		5AEC2AF3143B619C0022D4BD /* TicketWindowController.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = TicketWindowController.rb; sourceTree = "<group>"; };
+		5AEC2AF3143B619C0022D4BD /* WebWindowController.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = WebWindowController.rb; sourceTree = "<group>"; };
 		5AF68635144B35C700E42EF7 /* NewTicketController.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = NewTicketController.rb; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -119,8 +119,8 @@
 				5A57A4EF1425F1A7000F496A /* Other Sources */,
 				5A57A4E41425F1A7000F496A /* Supporting Files */,
 				5AA073FE1434A2CF0047684D /* Resources */,
-				5AEC2AF3143B619C0022D4BD /* TicketWindowController.rb */,
-				5AEC2AEE143B5E550022D4BD /* TicketWindow.xib */,
+				5AEC2AF3143B619C0022D4BD /* WebWindowController.rb */,
+				5AEC2AEE143B5E550022D4BD /* WebWindow.xib */,
 				5A8C890E1445E5480092F7EE /* AppDelegate.rb */,
 				5AF68635144B35C700E42EF7 /* NewTicketController.rb */,
 				5A8C89111445E7E50092F7EE /* NewTicket.xib */,
@@ -235,8 +235,8 @@
 				5A0CB136142A45C10015FEE9 /* mytrac.rb in Resources */,
 				5A621CB914336EC60077FA6E /* keychain in Resources */,
 				5AEC2AA31434A5E70022D4BD /* icon.icns in Resources */,
-				5AEC2AEF143B5E550022D4BD /* TicketWindow.xib in Resources */,
-				5AEC2AF4143B619C0022D4BD /* TicketWindowController.rb in Resources */,
+				5AEC2AEF143B5E550022D4BD /* WebWindow.xib in Resources */,
+				5AEC2AF4143B619C0022D4BD /* WebWindowController.rb in Resources */,
 				5A8C890F1445E5480092F7EE /* AppDelegate.rb in Resources */,
 				5A8C89121445E7E50092F7EE /* NewTicket.xib in Resources */,
 				5AF68636144B35C700E42EF7 /* NewTicketController.rb in Resources */,
