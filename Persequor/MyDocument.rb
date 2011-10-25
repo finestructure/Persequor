@@ -667,7 +667,7 @@ class MyDocument < NSPersistentDocument
     base_url = selected_account["url"]
     url = NSURL.URLWithString("#{base_url}/ticket/#{ticket.id}")
 
-    vc = TicketWindowController.alloc.initWithWindowNibName("TicketWindow")
+    vc = WebWindowController.alloc.initWithWindowNibName("WebWindow")
     vc.url = url
     vc.title = "Ticket #{ticket.id}"
     vc.showWindow(self)
