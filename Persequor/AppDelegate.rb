@@ -22,6 +22,37 @@ class AppDelegate
   end
 
 
+  def base_url
+    doc = NSDocumentController.sharedDocumentController.currentDocument
+    if doc != nil
+      return doc.ticket_cache.url
+    else
+      # one of the other windows not associated with a document is key
+      # we have to figure out which document it belongs to
+      key_window = NSApplication.sharedApplication.keyWindow
+      wc = key_window.windowController
+      # get the full url of key window (if it has one)
+      begin
+        current_url = wc.url
+      rescue
+        current_url = ""
+      end
+    
+      doc = NSDocumentController.sharedDocumentController.documents.find do |d|
+        # pick the document with matches the beginning of the full url:
+        # that's the base url we're looking for
+        current_url.start_with?(d.ticket_cache.url)
+      end
+        
+      if doc != nil
+        return doc.ticket_cache.url
+      end
+    end
+    
+    return nil
+  end
+
+
   def show_page(sender)
     case sender.tag
     when 1
@@ -36,11 +67,8 @@ class AppDelegate
       return
     end
     
-    doc = NSDocumentController.sharedDocumentController.currentDocument
-    base_url = doc.ticket_cache.url
-    url = NSURL.URLWithString("#{base_url}/#{page.downcase}")
     vc = WebWindowController.alloc.initWithWindowNibName("WebWindow")
-    vc.url = url
+    vc.url = "#{base_url}/#{page.downcase}"
     vc.title = page
     vc.showWindow(self)
   end
@@ -48,10 +76,8 @@ class AppDelegate
 
   def validateMenuItem(menuItem)
     if ['Wiki', 'Timeline', 'Roadmap', 'Search'].include?(menuItem.title)
-      # deactivate menu when there's no document associated (i.e. we're
-      # not focused on the document window)
-      doc = NSDocumentController.sharedDocumentController.currentDocument
-      return doc != nil
+      # only activate menu items if we can obtain a base url
+      return base_url != nil
     end
   end
 

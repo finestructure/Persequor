@@ -663,12 +663,10 @@ class MyDocument < NSPersistentDocument
     
     ticket = @tickets.arrangedObjects[row_index]
     $log.debug("ticket: #{ticket.id}")
-    
     base_url = selected_account["url"]
-    url = NSURL.URLWithString("#{base_url}/ticket/#{ticket.id}")
 
     vc = WebWindowController.alloc.initWithWindowNibName("WebWindow")
-    vc.url = url
+    vc.url = "#{base_url}/ticket/#{ticket.id}"
     vc.title = "Ticket #{ticket.id}"
     vc.showWindow(self)
   end

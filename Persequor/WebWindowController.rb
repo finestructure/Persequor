@@ -15,7 +15,8 @@ class WebWindowController < NSWindowController
   
   
   def windowDidLoad
-    request = NSURLRequest.requestWithURL(@url)
+    url = NSURL.URLWithString(@url)
+    request = NSURLRequest.requestWithURL(url)
     @web_view.frameLoadDelegate = self
     @web_view.mainFrame.loadRequest(request)
     self.window.makeKeyAndOrderFront(self)
