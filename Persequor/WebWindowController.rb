@@ -8,10 +8,11 @@
 
 
 class WebWindowController < NSWindowController
+  attr_accessor :progress_bar
+  attr_accessor :stop_button
   attr_accessor :url
   attr_accessor :ticket
   attr_accessor :web_view
-  attr_accessor :spinner
   
   
   def windowDidLoad
@@ -29,12 +30,14 @@ class WebWindowController < NSWindowController
   
 
   def webView(sender, didStartProvisionalLoadForFrame:frame)
-    @spinner.startAnimation(self)
+    @progress_bar.hidden = false
+    @stop_button.hidden = false
   end
 
   
   def webView(sender, didFinishLoadForFrame:frame)
-    @spinner.stopAnimation(self)
+    @progress_bar.hidden = true
+    @stop_button.hidden = true
   end
   
   
