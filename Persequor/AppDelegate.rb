@@ -78,6 +78,8 @@ class AppDelegate
     if ['Wiki', 'Timeline', 'Roadmap', 'Search'].include?(menuItem.title)
       # only activate menu items if we can obtain a base url
       return base_url != nil
+    else
+      return true
     end
   end
 
