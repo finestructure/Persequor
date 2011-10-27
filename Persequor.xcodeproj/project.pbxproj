@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		5A0CB136142A45C10015FEE9 /* mytrac.rb in Resources */ = {isa = PBXBuildFile; fileRef = 5A0CB135142A45C10015FEE9 /* mytrac.rb */; };
-		5A21ADF51459BDCC00C0A890 /* stop.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A21ADF41459BDCC00C0A890 /* stop.png */; };
 		5A2DF44A145050E300625D4F /* PriorityColorValueTransformer.rb in Resources */ = {isa = PBXBuildFile; fileRef = 5A2DF449145050E300625D4F /* PriorityColorValueTransformer.rb */; };
 		5A57A4DD1425F1A7000F496A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A57A4DC1425F1A7000F496A /* Cocoa.framework */; };
 		5A57A4DF1425F1A7000F496A /* MacRuby.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A57A4DE1425F1A7000F496A /* MacRuby.framework */; };
@@ -42,7 +41,6 @@
 
 /* Begin PBXFileReference section */
 		5A0CB135142A45C10015FEE9 /* mytrac.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = mytrac.rb; sourceTree = "<group>"; };
-		5A21ADF41459BDCC00C0A890 /* stop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = stop.png; sourceTree = "<group>"; };
 		5A2DF449145050E300625D4F /* PriorityColorValueTransformer.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = PriorityColorValueTransformer.rb; sourceTree = "<group>"; };
 		5A57A4D81425F1A7000F496A /* Persequor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Persequor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A57A4DC1425F1A7000F496A /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -169,7 +167,6 @@
 		5AA073FE1434A2CF0047684D /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				5A21ADF41459BDCC00C0A890 /* stop.png */,
 				5AEC2AA21434A5E70022D4BD /* icon.icns */,
 			);
 			name = Resources;
@@ -260,7 +257,6 @@
 				5A8C89121445E7E50092F7EE /* NewTicket.xib in Resources */,
 				5AF68636144B35C700E42EF7 /* NewTicketController.rb in Resources */,
 				5A2DF44A145050E300625D4F /* PriorityColorValueTransformer.rb in Resources */,
-				5A21ADF51459BDCC00C0A890 /* stop.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

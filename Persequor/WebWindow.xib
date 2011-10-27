@@ -177,14 +177,14 @@
 								<bool key="NSToolbarIsUserRemovable">YES</bool>
 								<int key="NSToolbarItemVisibilityPriority">0</int>
 							</object>
-							<object class="NSToolbarItem" id="976968397">
+							<object class="NSToolbarItem" id="454444230">
 								<object class="NSMutableString" key="NSToolbarItemIdentifier">
 									<characters key="NS.bytes">AE573607-0E55-4984-B30C-8D2686D2EC69</characters>
 								</object>
 								<string key="NSToolbarItemLabel">Stop</string>
 								<string key="NSToolbarItemPaletteLabel">Stop</string>
 								<nil key="NSToolbarItemToolTip"/>
-								<object class="NSButton" key="NSToolbarItemView" id="624291437">
+								<object class="NSButton" key="NSToolbarItemView" id="318200483">
 									<reference key="NSNextResponder"/>
 									<int key="NSvFlags">268</int>
 									<string key="NSFrame">{{3, 14}, {25, 25}}</string>
@@ -193,33 +193,30 @@
 									<reference key="NSNextKeyView"/>
 									<string key="NSReuseIdentifierKey">_NS:3985</string>
 									<bool key="NSEnabled">YES</bool>
-									<object class="NSButtonCell" key="NSCell" id="500497262">
+									<object class="NSButtonCell" key="NSCell" id="793328009">
 										<int key="NSCellFlags">67239424</int>
 										<int key="NSCellFlags2">134217728</int>
 										<string key="NSContents"/>
-										<object class="NSFont" key="NSSupport">
+										<object class="NSFont" key="NSSupport" id="98555830">
 											<string key="NSName">LucidaGrande</string>
 											<double key="NSSize">13</double>
 											<int key="NSfFlags">1044</int>
 										</object>
 										<string key="NSCellIdentifier">_NS:3985</string>
-										<reference key="NSControlView" ref="624291437"/>
-										<int key="NSButtonFlags">-1191427841</int>
-										<int key="NSButtonFlags2">268435589</int>
-										<object class="NSCustomResource" key="NSNormalImage" id="1066240111">
-											<string key="NSClassName">NSImage</string>
-											<string key="NSResourceName">stop</string>
-										</object>
+										<reference key="NSControlView" ref="318200483"/>
+										<int key="NSButtonFlags">-2034876161</int>
+										<int key="NSButtonFlags2">268435619</int>
+										<reference key="NSAlternateImage" ref="98555830"/>
 										<string key="NSAlternateContents"/>
 										<string key="NSKeyEquivalent">.</string>
 										<int key="NSPeriodicDelay">200</int>
 										<int key="NSPeriodicInterval">25</int>
 									</object>
 								</object>
-								<reference key="NSToolbarItemImage" ref="1066240111"/>
+								<nil key="NSToolbarItemImage"/>
 								<nil key="NSToolbarItemTarget"/>
 								<nil key="NSToolbarItemAction"/>
-								<string key="NSToolbarItemMinSize">{19, 18}</string>
+								<string key="NSToolbarItemMinSize">{25, 25}</string>
 								<string key="NSToolbarItemMaxSize">{25, 25}</string>
 								<bool key="NSToolbarItemEnabled">YES</bool>
 								<bool key="NSToolbarItemAutovalidates">YES</bool>
@@ -267,14 +264,14 @@
 						<reference ref="522147296"/>
 						<reference ref="580059523"/>
 						<reference ref="483336922"/>
-						<reference ref="976968397"/>
+						<reference ref="454444230"/>
 					</object>
-					<object class="NSMutableArray" key="NSToolbarIBDefaultItems">
+					<object class="NSArray" key="NSToolbarIBDefaultItems">
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<reference ref="522147296"/>
+						<reference ref="454444230"/>
 						<reference ref="483336922"/>
 						<reference ref="580059523"/>
-						<reference ref="976968397"/>
 					</object>
 					<object class="NSArray" key="NSToolbarIBSelectableItems" id="0">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -380,17 +377,17 @@
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">stop_button</string>
 						<reference key="source" ref="1001"/>
-						<reference key="destination" ref="624291437"/>
+						<reference key="destination" ref="318200483"/>
 					</object>
 					<int key="connectionID">49</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
-						<string key="label">stopLoading:</string>
-						<reference key="source" ref="174885830"/>
-						<reference key="destination" ref="624291437"/>
+						<string key="label">stop_reload_button:</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="318200483"/>
 					</object>
-					<int key="connectionID">50</int>
+					<int key="connectionID">57</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
@@ -468,7 +465,7 @@
 							<reference ref="522147296"/>
 							<reference ref="580059523"/>
 							<reference ref="483336922"/>
-							<reference ref="976968397"/>
+							<reference ref="454444230"/>
 						</object>
 						<reference key="parent" ref="1005"/>
 					</object>
@@ -516,26 +513,26 @@
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">48</int>
-						<reference key="object" ref="976968397"/>
+						<reference key="object" ref="454444230"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="624291437"/>
+							<reference ref="318200483"/>
 						</object>
 						<reference key="parent" ref="252665102"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">46</int>
-						<reference key="object" ref="624291437"/>
+						<reference key="object" ref="318200483"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="500497262"/>
+							<reference ref="793328009"/>
 						</object>
-						<reference key="parent" ref="976968397"/>
+						<reference key="parent" ref="454444230"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">47</int>
-						<reference key="object" ref="500497262"/>
-						<reference key="parent" ref="624291437"/>
+						<reference key="object" ref="793328009"/>
+						<reference key="parent" ref="318200483"/>
 					</object>
 				</object>
 			</object>
@@ -598,9 +595,138 @@
 				<reference key="dict.values" ref="0"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">53</int>
+			<int key="maxID">57</int>
 		</object>
-		<object class="IBClassDescriber" key="IBDocument.Classes"/>
+		<object class="IBClassDescriber" key="IBDocument.Classes">
+			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
+				<bool key="EncodedWithXMLCoder">YES</bool>
+				<object class="IBPartialClassDescription">
+					<string key="className">WebView</string>
+					<object class="NSMutableDictionary" key="actions">
+						<string key="NS.key.0">reloadFromOrigin:</string>
+						<string key="NS.object.0">id</string>
+					</object>
+					<object class="NSMutableDictionary" key="actionInfosByName">
+						<string key="NS.key.0">reloadFromOrigin:</string>
+						<object class="IBActionInfo" key="NS.object.0">
+							<string key="name">reloadFromOrigin:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</object>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/WebView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">WebWindowController</string>
+					<string key="superclassName">NSWindowController</string>
+					<object class="NSMutableDictionary" key="actions">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>back_forward_selector:</string>
+							<string>reload:</string>
+							<string>stop_reload_button:</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+						</object>
+					</object>
+					<object class="NSMutableDictionary" key="actionInfosByName">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>back_forward_selector:</string>
+							<string>reload:</string>
+							<string>stop_reload_button:</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBActionInfo">
+								<string key="name">back_forward_selector:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">reload:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">stop_reload_button:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+						</object>
+					</object>
+					<object class="NSMutableDictionary" key="outlets">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>progress_bar</string>
+							<string>state</string>
+							<string>stop_button</string>
+							<string>ticket</string>
+							<string>url</string>
+							<string>web_view</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+						</object>
+					</object>
+					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>progress_bar</string>
+							<string>state</string>
+							<string>stop_button</string>
+							<string>ticket</string>
+							<string>url</string>
+							<string>web_view</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBToOneOutletInfo">
+								<string key="name">progress_bar</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">state</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">stop_button</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">ticket</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">url</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">web_view</string>
+								<string key="candidateClassName">id</string>
+							</object>
+						</object>
+					</object>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/WebWindowController.h</string>
+					</object>
+				</object>
+			</object>
+		</object>
 		<int key="IBDocument.localizationMode">0</int>
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaFramework</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDevelopmentDependencies">
@@ -617,7 +743,6 @@
 				<string>NSGoRightTemplate</string>
 				<string>NSMenuCheckmark</string>
 				<string>NSMenuMixedState</string>
-				<string>stop</string>
 			</object>
 			<object class="NSMutableArray" key="dict.values">
 				<bool key="EncodedWithXMLCoder">YES</bool>
@@ -625,7 +750,6 @@
 				<string>{9, 9}</string>
 				<string>{9, 8}</string>
 				<string>{7, 2}</string>
-				<string>{14, 14}</string>
 			</object>
 		</object>
 	</data>

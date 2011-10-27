@@ -9,6 +9,7 @@
 
 class WebWindowController < NSWindowController
   attr_accessor :progress_bar
+  attr_accessor :state
   attr_accessor :stop_button
   attr_accessor :url
   attr_accessor :ticket
@@ -16,6 +17,7 @@ class WebWindowController < NSWindowController
   
   
   def windowDidLoad
+    @state = :idle
     url = NSURL.URLWithString(@url)
     request = NSURLRequest.requestWithURL(url)
     @web_view.frameLoadDelegate = self
@@ -29,35 +31,57 @@ class WebWindowController < NSWindowController
   end
   
   
-  def transition(from, to)
-    if from == :loading and to == :idle
-      @progress_bar.hidden = true
-      @stop_button.hidden = true
+  def transition_to(target_state)
+    case @state
+    when :loading
+      if target_state == :idle
+        @progress_bar.hidden = true
+        @stop_button.image = \
+          NSImage.imageNamed(NSImageNameRefreshTemplate)
+      end
+    when :idle
+      if target_state == :loading
+        @progress_bar.hidden = false
+        @stop_button.image = \
+          NSImage.imageNamed(NSImageNameStopProgressTemplate)
+      end
     end
-    if from == :idle and to == :loading
-      @progress_bar.hidden = false
-      @stop_button.hidden = false
-    end
+    @state = target_state
   end
   
 
   def webView(sender, didStartProvisionalLoadForFrame:frame)
-    transition(:idle, :loading)
+    transition_to(:loading)
   end
 
   
   def webView(sender, didFinishLoadForFrame:frame)
-    transition(:loading, :idle)
+    transition_to(:idle)
   end
   
   
   def webView(sender, didFailProvisionalLoadWithError:error, forFrame:frame)
-    transition(:loading, :idle)
+    transition_to(:idle)
   end
   
   
   def webView(sender, didFailLoadWithError:error, forFrame:frame)
-    transition(:loading, :idle)
+    transition_to(:idle)
+  end
+  
+  
+  def reload(sender)
+    @web_view.reload(sender)
+  end
+  
+  
+  def stop_reload_button(sender)
+    case @state
+    when :idle
+      @web_view.reload(sender)
+    when :loading
+      @web_view.stopLoading(sender)
+    end
   end
   
   
