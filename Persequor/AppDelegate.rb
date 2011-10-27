@@ -11,7 +11,15 @@ class AppDelegate
   
   def refresh(sender)
     doc = NSDocumentController.sharedDocumentController.currentDocument
-    doc.refresh(sender)
+    if doc != nil
+      doc.refresh(sender)
+    else
+      key_window = NSApplication.sharedApplication.keyWindow
+      wc = key_window.windowController
+      if wc.respondsToSelector('reload:')
+        wc.reload(sender)
+      end
+    end
   end
   
   
