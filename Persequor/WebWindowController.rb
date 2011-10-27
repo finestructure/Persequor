@@ -28,16 +28,36 @@ class WebWindowController < NSWindowController
     self.window.title = title
   end
   
+  
+  def transition(from, to)
+    if from == :loading and to == :idle
+      @progress_bar.hidden = true
+      @stop_button.hidden = true
+    end
+    if from == :idle and to == :loading
+      @progress_bar.hidden = false
+      @stop_button.hidden = false
+    end
+  end
+  
 
   def webView(sender, didStartProvisionalLoadForFrame:frame)
-    @progress_bar.hidden = false
-    @stop_button.hidden = false
+    transition(:idle, :loading)
   end
 
   
   def webView(sender, didFinishLoadForFrame:frame)
-    @progress_bar.hidden = true
-    @stop_button.hidden = true
+    transition(:loading, :idle)
+  end
+  
+  
+  def webView(sender, didFailProvisionalLoadWithError:error, forFrame:frame)
+    transition(:loading, :idle)
+  end
+  
+  
+  def webView(sender, didFailLoadWithError:error, forFrame:frame)
+    transition(:loading, :idle)
   end
   
   
