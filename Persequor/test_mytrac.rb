@@ -167,6 +167,15 @@ class Test02TicketCache < Test::Unit::TestCase
       @cache.types)
   end
   
+  
+  def test_10_umlaut
+    ticket = {'summary'=>'äöüß', 'description'=>'my description'}
+    @cache.create(ticket)
+    updates = @cache.updates
+    assert_equal([1,2], updates)
+    t = @cache.fetch(2)
+    assert_equal('äöüß', t.summary)
+  end
 end
 
 

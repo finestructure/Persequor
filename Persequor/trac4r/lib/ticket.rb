@@ -38,6 +38,9 @@ module Trac
       ticket.updated_at = params[2]
       attributes = params[3]
       attributes.each do |key,value|
+        if value.kind_of?(String)
+          value = value.force_encoding('UTF-8')
+        end
         ticket.instance_variable_set("@#{key}".to_sym,value)
       end
       return ticket
